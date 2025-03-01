@@ -1,8 +1,25 @@
 # PLC_Project
-<<<<<<< HEAD
-
 ## Overview
 This project aims to create a game centered around the Pokédex, a text-based system to store and display Pokémon data. Players will be able to go on adventures to discover new Pokémon that they can add to their collection.
+
+## Getting Started
+
+### Clone the Repo
+
+Go to the folder you want to save the project to by using `cd ~/Desktop`
+
+Clone the project using `git clone https://github.com/halanaman/PLC_Project.git`
+
+Open the project folder with `cd PLC_Project`
+
+### Working in branches
+
+Pull updates from main before working on your branch `git pull origin main`
+
+Creating a branch `git checkout -b your-branch-name`
+
+Pushing your branch `git push origin your-branch-name`
+
 
 ## Prerequisites
 - Ensure you have `gcc` installed.
@@ -31,24 +48,4 @@ project-root/
 │── Makefile
 │── README.md
 ```
-=======
-A game about adventuring and collecting pokemons.
 
-## Getting Started
-
-### Clone the Repo
-
-Go to the folder you want to save the project to by using `cd ~/Desktop`
-
-Clone the project using `git clone https://github.com/halanaman/PLC_Project.git`
-
-Open the project folder with `cd PLC_Project`
-
-### Working in branches
-
-Pull updates from main before working on your branch `git pull origin main`
-
-Creating a branch `git checkout -b your-branch-name`
-
-Pushing your branch `git push origin your-branch-name`
->>>>>>> e7347065ce96ea73000a54cc1b4237dec4be7430
