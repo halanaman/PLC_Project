@@ -16,7 +16,7 @@ Open the project folder with `cd PLC_Project`
 
 Pull updates from main before working on your branch `git pull origin main`
 
-Creating a branch `git checkout -b your-branch-name`
+Creating a branch `git checkout -b your-branch-name` or `git switch -c your-branch-name`
 
 Stage a file `git add file.c` or stage all changes in working directory `git add .`
 
