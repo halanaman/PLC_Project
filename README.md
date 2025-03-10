@@ -18,8 +18,25 @@ Pull updates from main before working on your branch `git pull origin main`
 
 Creating a branch `git checkout -b your-branch-name`
 
+Stage a file `git add file.c` or stage all changes in working directory `git add .`
+
+Commit your changes `git commit -m "Your commit message"`
+
 Pushing your branch `git push origin your-branch-name`
 
+### Merging onto main
+
+Switch to the main branch `git checkout main` or `git switch main`
+
+Pull any updates from main `git pull origin main`
+
+Merge your branch onto main `git merge your-branch-name`
+
+Resolve any merge conflicts, if any, then stage the resolved file(s) `git add resolved-file.txt`
+
+Complete the merge `git commit -m "Resolved merge conflicts"`
+
+Push `git push origin main`
 
 ## Prerequisites
 - Ensure you have `gcc` installed.
