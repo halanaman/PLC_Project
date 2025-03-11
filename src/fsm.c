@@ -13,6 +13,8 @@ void init_fsm(void) {
 
 void handle_state(AppState *currentState) {
     int choice;
+    
+    init_fsm();
     while (*currentState != STATE_EXIT) {
         switch (*currentState) {
             case STATE_HOME:

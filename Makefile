@@ -11,7 +11,8 @@ SRC = src/main.c \
 	  src/fsm.c \
       src/pages/homePage.c \
       src/util/page.c \
-	  src/util/input.c
+	  src/util/input.c \
+	  src/util/constants.c
 
 # Object files (convert .c to .o inside obj/)
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
