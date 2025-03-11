@@ -30,14 +30,21 @@ To compile the program, run:
 ```sh
 make
 ```
-This will compile the `main.c` file located in the `src/` directory and generate an executable named `program`
+This will compile the `main.c` file located in the `src/` directory and generate an executable named `pokedex.exe`
+
+## Compilation without ansi
+To compile the progam without ansi, run:
+```sh
+make test
+```
+This will compile the `main.c` file located in the `src/` directory, using C99 mode, and generate an executable named `pokedex.exe`
 
 ## Clean Up
 To remove the compiled executable, run:
 ```sh
 make clean
 ```
-This will delete the `program` file
+This will delete the `pokedex.exe` file
 
 ## File Structure
 ```css
