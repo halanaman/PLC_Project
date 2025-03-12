@@ -1,8 +1,8 @@
 # Compiler
 CC = gcc
-CFLAGS = -Wall -Werror -pedantic -I./src/homePage -I./src/util/page
-CFLAGS_ANSI = -ansi $(CFLAGS)  # CFLAGS with -ansi (default)
-CFLAGS_TEST = $(CFLAGS)        # CFLAGS without -ansi
+CFLAGS = -Wall -Werror -I./src/homePage -I./src/util/page
+CFLAGS_ANSI = -ansi -pedantic $(CFLAGS)  # CFLAGS with -ansi (default)
+# CFLAGS_ANSI = $(CFLAGS)  # CFLAGS with -ansi (default)
 
 # Directories
 SRC_DIR = src
@@ -30,12 +30,6 @@ $(TARGET): $(OBJ)
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)/src/pages $(OBJ_DIR)/src/util  # Ensure obj directories exist
 	$(CC) $(CFLAGS_ANSI) -c $< -o $@
-
-# Alternative rule for testing (excludes -ansi)
-.PHONY: test
-test: CFLAGS = $(CFLAGS_TEST)
-test: clean $(OBJ)
-	$(CC) $(CFLAGS_TEST) $(OBJ) -o $(TARGET)
 
 # Clean-up rule
 .PHONY: clean

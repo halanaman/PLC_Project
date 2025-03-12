@@ -35,9 +35,12 @@ This will compile the `main.c` file located in the `src/` directory and generate
 ## Compilation without ansi
 To compile the progam without ansi, run:
 ```sh
-make test
+## comment out this line
+# CFLAGS_ANSI = -ansi -pedantic $(CFLAGS)  # CFLAGS with -ansi (default)
+
+## use this line instead
+CFLAGS_ANSI = $(CFLAGS)  # CFLAGS without ansi
 ```
-This will compile the `main.c` file located in the `src/` directory, using C99 mode, and generate an executable named `pokedex.exe`
 
 ## Clean Up
 To remove the compiled executable, run:
