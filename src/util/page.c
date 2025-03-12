@@ -5,72 +5,78 @@
 
 #include "page.h"
 
-/**
- * @brief Creates and initializes a new RenderedBlock structure.
- * 
- * Allocates memory for a new RenderedBlock and initializes its dimensions 
- * and displayed text. If memory allocation fails, the function returns NULL.
- * 
- * @param numRows Number of text rows in the block.
- * @param numCols Maximum width of each text row.
- * @param displayText A 2D array (DisplayStrings) containing the text to display.
- * @return Pointer to the newly allocated RenderedBlock, or NULL if allocation fails.
- */
-RenderedBlock *create_rendered_block(int numRows, int numCols, DisplayStrings displayText) {
-    int i;
-    RenderedBlock *block = malloc(sizeof(RenderedBlock));
-    if (!block) return NULL;
+RenderedBlocks *create_blocks(int numBlocks) {
+    RenderedBlocks *renderedBlocks;
+    if (numBlocks < 1) return NULL;
 
+    renderedBlocks = malloc(sizeof(RenderedBlocks));
+    if (!renderedBlocks) return NULL;
+
+    renderedBlocks->rowToRenderEveryBlock = calloc(numBlocks, sizeof(int));
+    if (!renderedBlocks->rowToRenderEveryBlock) {
+        free_blocks(renderedBlocks);
+        return NULL;
+    }
+
+    renderedBlocks->blocks = malloc(numBlocks * sizeof(RenderedBlock));
+    if (!renderedBlocks->blocks) {
+        free_blocks(renderedBlocks);
+        return NULL;
+    }
+    renderedBlocks->numBlocks = numBlocks;
+
+    return renderedBlocks;
+}
+
+void add_block_to_blocks(int index, RenderedBlocks *renderedBlocks, int rowToRenderBlock, int numRows, int numCols, DisplayStrings displayText) {
+    int i;
+    RenderedBlock *block;
+
+    if (check_memory_allocation_blocks(renderedBlocks) != 0) return;
+    if (index < 0 || index >= renderedBlocks->numBlocks) return; 
+
+    if (rowToRenderBlock + numRows > MAX_BLOCK_HEIGHT) return;
+    renderedBlocks->rowToRenderEveryBlock[index] = rowToRenderBlock;
+    
+    block = &renderedBlocks->blocks[index];
     block->numRows = numRows;
     block->numCols = numCols;
     for (i = 0; i < numRows; i++) {
         strcpy(block->displayedText[i], displayText[i]);
     }
-    return block;
 }
 
-/**
- * @brief Creates and initializes a new Page structure.
- * 
- * Allocates memory for a new Page and initializes its name, number of blocks, 
- * and rendered blocks. If memory allocation fails, the function returns NULL.
- * 
- * Future: Have not taken in account Page.actions yet 
- * 
- * @param name Name of the page.
- * @param numBlocks Number of rendered blocks in the page.
- * @param blocks Pointer to an array of RenderedBlock structures.
- * @return Pointer to the newly allocated Page, or NULL if allocation fails.
- */
-Page *create_page(char *name, int numBlocks, RenderedBlock *blocks) {
+int check_memory_allocation_blocks(RenderedBlocks *renderedBlocks) {
+    if (!renderedBlocks || !renderedBlocks->blocks || !renderedBlocks->rowToRenderEveryBlock)
+        return 1;
+    return 0;
+}
+
+void free_blocks(RenderedBlocks *renderedBlocks) {
+    if (!renderedBlocks) return;
+    if (renderedBlocks->blocks) 
+        free(renderedBlocks->blocks);
+    if (renderedBlocks->rowToRenderEveryBlock) 
+        free(renderedBlocks->rowToRenderEveryBlock);
+    free(renderedBlocks);
+}
+
+Page *create_page(char *name, RenderedBlocks *renderedBlocks) {
     Page *page = malloc(sizeof(Page));
-    if (!page) return NULL;
+    if (!page || check_memory_allocation_blocks(renderedBlocks) != 0) return NULL;
 
     page->name = name;
-    page->numBlocks = numBlocks;
-    page->renderedBlocks = blocks;
+    page->renderedBlocks = renderedBlocks;
     return page;
 }
 
-/**
- * @brief Frees the memory allocated for a Page structure.
- * 
- * This function releases the memory allocated for the page and its associated 
- * rendered blocks. If the page is NULL, the function does nothing.
- * 
- * @param page Pointer to the Page structure to free.
- */
 void free_page(Page *page) {
     if (page) {
-        free(page->renderedBlocks);
+        free_blocks(page->renderedBlocks);
         free(page);
     }
 }
 
-
-/*
-Future: Can add in functionality to add padding on both sides
-*/
 void render_block(RenderedBlock *block) {
     int i;
     for (i = 0; i < block->numRows; i++) {
@@ -84,23 +90,34 @@ void render_block(RenderedBlock *block) {
     }
 }
 
-/**
- * @brief Renders the given page by clearing the screen and displaying its blocks.
- * 
- * If the page is NULL, the function does nothing. Otherwise, it clears the screen
- * and iterates through the blocks of the page, rendering each one.
- * 
- * Future: Can add in functionality to add space between blocks
- * 
- * @param page Pointer to the Page structure to render.
- */
+void render_blocks(RenderedBlocks *renderedBlocks) {
+    int i, currentLine, nextLine;
+    RenderedBlock *blocks;
+    if (check_memory_allocation_blocks(renderedBlocks) != 0) return;
+
+    currentLine = 0;
+    blocks = renderedBlocks->blocks;
+    for (i = 0; i < renderedBlocks->numBlocks; i++) {
+        nextLine = renderedBlocks->rowToRenderEveryBlock[i];
+        while (nextLine > currentLine) {
+            printf("\n");
+            currentLine++;
+        }
+        render_block(&blocks[i]);
+        currentLine += blocks[i].numRows;
+    }
+    /* Last 2 slots reserved for error and input text*/
+    while (currentLine < MAX_BLOCK_HEIGHT) {
+        printf("\n");
+        currentLine++;
+    }
+}
+
 void render_page(Page *page) {
-    int i;
     if (!page) return;
     clear_screen();
-    for (i = 0; i < page->numBlocks; i++) {
-        render_block(&page->renderedBlocks[i]);
-    }
+    render_blocks(page->renderedBlocks);
+    free_page(page);
 }
 
 void clear_screen(void) {

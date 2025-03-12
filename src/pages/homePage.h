@@ -2,9 +2,15 @@
 #define HOMEPAGE_H
 
 #include "../util/page.h"
+#include "../fsm.h"
 
-Page *create_home_page(void);
 
-int render_home_page(void);
+typedef enum {
+    ENTER_HOMEPAGE,
+    LEAVE_HOMEPAGE
+} HomePageState;
+
+
+void run_home_page(AppState *currentState);
 
 #endif

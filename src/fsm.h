@@ -11,6 +11,6 @@ typedef enum {
 
 void init_fsm(void);
 
-void handle_state(AppState *currentState);
+void run_main_fsm(AppState *currentState);
 
 #endif

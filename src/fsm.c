@@ -11,26 +11,32 @@ void init_fsm(void) {
     printf("Starting Pokedex...\n");
 }
 
-void handle_state(AppState *currentState) {
+/* placeholder until logic for other states are placed into their own file*/
+int temp_get_user_input(void) {
     int choice;
+    while (1) {
+        if (scanf("%d", &choice) == 1) break;
+        while (getchar() != '\n');  /* Clear input buffer*/
+        printf("Invalid input, try again: ");
+    }
+    return choice;
+}
+
+void run_main_fsm(AppState *currentState) {
+    int choice; /* placeholder until logic for other states are placed into their own file*/
     
     init_fsm();
     while (*currentState != STATE_EXIT) {
         switch (*currentState) {
             case STATE_HOME:
-                render_home_page();
-                printf("Enter choice (1: Pokédex, 2: Adventure, 3: Exit): ");
-                choice = get_user_input();
-                if (choice == 1) *currentState = STATE_POKEDEX;
-                else if (choice == 2) *currentState = STATE_ADVENTURE;
-                else if (choice == 3) *currentState = STATE_SAVE;
+                run_home_page(currentState);
                 break;
 
             case STATE_POKEDEX:
                 clear_screen();
                 printf("Rendering Pokédex Page...\n");
                 printf("Enter choice (1: Home, 2: Adventure, 3: Exit): ");
-                choice = get_user_input();
+                choice = temp_get_user_input();
                 if (choice == 1) *currentState = STATE_HOME;
                 else if (choice == 2) *currentState = STATE_ADVENTURE;
                 else if (choice == 3) *currentState = STATE_SAVE;
@@ -40,7 +46,7 @@ void handle_state(AppState *currentState) {
                 clear_screen();
                 printf("Rendering Adventure Page...\n");
                 printf("Enter choice (1: Pokédex, 2: Home, 3: Exit): ");
-                choice = get_user_input();
+                choice = temp_get_user_input();
                 if (choice == 1) *currentState = STATE_POKEDEX;
                 else if (choice == 2) *currentState = STATE_HOME;
                 else if (choice == 3) *currentState = STATE_SAVE;
@@ -55,7 +61,7 @@ void handle_state(AppState *currentState) {
                 printf("Exiting Game...\n");
                 *currentState = STATE_EXIT;
                 break;
-
+            /** This step just a placeholder, it will never actually enter here. */
             case STATE_EXIT:
                 break;
         }

@@ -5,7 +5,7 @@
 int main(int argc, char ** argv)
 {
     AppState currentState = STATE_HOME;
-    handle_state(&currentState);
+    run_main_fsm(&currentState);
     return 0;
 }
 
