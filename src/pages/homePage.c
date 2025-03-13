@@ -36,21 +36,21 @@ work flow of creating all pages in any appState
     (b) for each state in appState_fsm, you will: 
         - create display page for that state, render it. (page will be freed in render function)
         - process inputs using sub-state specific parser function
-        - use updateInputState() to indicate what the next sub-state is. 
+        - use update_input_state() to indicate what the next sub-state is. 
     (c) if appState_fsm moves to a state that requires it to exit current appState, make sure function
         calls update_app_state_struct() to update the state of main fsm before exiting, so main fsm knows where to go next.
 */
 
-void homePageMenuParser(InputState *inputState, char *input) {
+void home_page_menu_parser(InputState *inputState, char *input) {
     if (strcmp(input, "1") == 0) {
-        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_POKEDEX, 0);
+        update_input_state(inputState, 0, EXIT_HOMEPAGE, STATE_POKEDEX, 0);
     } else if (strcmp(input, "2") == 0) {
-        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_ADVENTURE, 0);
+        update_input_state(inputState, 0, EXIT_HOMEPAGE, STATE_ADVENTURE, 0);
     } else if (strcmp(input, "3") == 0) {
-        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_SAVE, 0);
+        update_input_state(inputState, 0, EXIT_HOMEPAGE, STATE_SAVE, 0);
     } else {
         /** This means invalid input, and appropriate error message should be shown */
-        updateInputState(inputState, 1, SHOW_HOMEPAGE, STATE_HOME, 0);
+        update_input_state(inputState, 1, SHOW_HOMEPAGE, STATE_HOME, 0);
     }
 }
 
@@ -86,7 +86,7 @@ void run_home_page(AppStateStruct *appStateStruct) {
         .errorState = 0,
         .appState = STATE_HOME,
         .stateAppState = SHOW_HOMEPAGE,
-        .parserFunction = &homePageMenuParser,
+        .parserFunction = &home_page_menu_parser,
         .previousInput = ""
     };
     /**

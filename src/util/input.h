@@ -43,7 +43,7 @@ void clear_input_buffer(void);
  * @param appState New appState value (represents high-level application state).
  * @param nextStateNextAppState New stateAppState value of next appState(also represents sub-state within a page).
  */
-void updateInputState(InputState *inputState, int errorState, int stateAppState, int appState, int nextStateNextAppState);
+void update_input_state(InputState *inputState, int errorState, int stateAppState, int appState, int nextStateNextAppState);
 
 /**
  * @brief Handles user input and updates the application state accordingly.
@@ -56,7 +56,7 @@ void updateInputState(InputState *inputState, int errorState, int stateAppState,
  * @param leaveAppStateEnumValue The enum value representing exiting current state into the main fsm.
  *
  * @note If inputState is NULL or does not have a valid parser function, the function 
- *       will call updateInputState to set an error state and terminate early.
+ *       will call update_input_state to set an error state and terminate early.
  *
  * @details 
  * - First, the function checks if inputState is valid; if not, it triggers early termination.
