@@ -41,13 +41,13 @@ work flow of creating all pages in any appState
 
 void homePageMenuParser(InputState *inputState, char *input) {
     if (strcmp(input, "1") == 0) {
-        updateInputState(inputState, 0, 1, 1);
+        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_POKEDEX);
     } else if (strcmp(input, "2") == 0) {
-        updateInputState(inputState, 0, 1, 2);
+        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_ADVENTURE);
     } else if (strcmp(input, "3") == 0) {
-        updateInputState(inputState, 0, 1, 3);
+        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_SAVE);
     } else {
-        updateInputState(inputState, 1, 0, 0);
+        updateInputState(inputState, 1, SHOW_HOMEPAGE, STATE_HOME);
     }
 }
 
@@ -65,6 +65,7 @@ Page *create_home_page(void) {
     homePageBlocks = create_blocks(1);
     if (!homePageBlocks) return NULL;
 
+    /** blockZeroText will be rendered starting from 0th to 5th row (height == 6). */
     add_block_to_blocks(0, homePageBlocks, 0, 6, SCREEN_LENGTH, blockZeroText);
 
     homePage = create_page("home", homePageBlocks);
@@ -80,30 +81,29 @@ void run_home_page(AppState *currentAppState) {
     Page *homePage;
     InputState inputState = {
         .errorState = 0,
-        .inputSize = 1,
-        .appState = 0,
-        .stateAppState = 0,
+        .appState = STATE_HOME,
+        .stateAppState = SHOW_HOMEPAGE,
         .parserFunction = &homePageMenuParser,
         .previousInput = ""
     };
 
-    HomePageState homePageState = ENTER_HOMEPAGE;
+    HomePageState homePageState = SHOW_HOMEPAGE;
 
-    while (homePageState != LEAVE_HOMEPAGE) {
+    while (homePageState != EXIT_HOMEPAGE) {
         switch(homePageState) {
-            case ENTER_HOMEPAGE:
+            case SHOW_HOMEPAGE:
                 homePage = create_home_page();
                 if (!homePage) {
-                    homePageState = LEAVE_HOMEPAGE;
+                    homePageState = EXIT_HOMEPAGE;
                     *currentAppState = STATE_SAVE;
                     break;
                 }
                 render_page(homePage);
-                get_user_input(&inputState);
+                get_user_input(&inputState, EXIT_HOMEPAGE);
                 homePageState = inputState.stateAppState;
                 *currentAppState = inputState.appState;   
                 break;
-            case LEAVE_HOMEPAGE:
+            case EXIT_HOMEPAGE:
                 break;
         }
     }

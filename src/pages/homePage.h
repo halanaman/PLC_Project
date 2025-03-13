@@ -6,8 +6,8 @@
 
 
 typedef enum {
-    ENTER_HOMEPAGE,
-    LEAVE_HOMEPAGE
+    SHOW_HOMEPAGE,
+    EXIT_HOMEPAGE
 } HomePageState;
 
 

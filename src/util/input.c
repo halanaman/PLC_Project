@@ -16,10 +16,10 @@ void updateInputState(InputState *inputState, int errorState, int stateAppState,
     inputState->appState = appState;
 }
 
-void get_user_input(InputState *inputState) {
+void get_user_input(InputState *inputState, int leaveAppStateEnumValue) {
     char input[MAX_MENU_INPUT_LENGTH + 1];
-    if (!inputState) {
-        updateInputState(inputState, -1, 1, 3); /*terminates if mem not allocated*/
+    if (!inputState || !inputState->parserFunction) {
+        updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE); /*terminates if mem not allocated*/
         return;
     }
 
@@ -41,10 +41,10 @@ void get_user_input(InputState *inputState) {
             break;
     }
     printf("\nEnter choice: ");
-
+    
     /* Gets input, does initial parsing of removing newline and limiting final input size */
     if (fgets(input, sizeof(input), stdin) == NULL) {
-        updateInputState(inputState, -1, 1, 3);
+        updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE);
         return;
     }
     if (strchr(input, '\n') == NULL) {

@@ -1,6 +1,8 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include "../fsm.h"
+
 struct InputState; /*Forward declaration*/
 
 /*
@@ -9,9 +11,8 @@ struct InputState; /*Forward declaration*/
 */
 typedef struct InputState {
     int errorState;
-    const int inputSize;
-    int appState;
-    int stateAppState;
+    AppState appState; 
+    int stateAppState; /** Represents state of appState_fsm. There is no safety check at compile time, so please ensure you use this correctly.*/
     void (*parserFunction)(struct InputState *inputState, char *input);
     char *previousInput; /*for debugging purpose*/
 } InputState;
@@ -40,17 +41,31 @@ void clear_input_buffer(void);
 void updateInputState(InputState *inputState, int errorState, int stateAppState, int appState);
 
 /**
- * @brief Handles user input and updates the application's state accordingly.
+ * @brief Handles user input and updates the application state accordingly.
  *
- * This function prompts the user for input and reads it using `fgets`. 
- * If the input buffer contains excess characters (i.e., user input exceeds buffer size), 
- * it calls `clear_input_buffer()` to remove the remaining characters.
- * After processing the input, it passes the string to the parser function 
- * (`inputState->parserFunction`) for further handling.
+ * This function retrieves user input from standard input, processes it,
+ * and applies a parser function to determine the next state of the application.
+ * It also handles error messages and ensures memory safety.
  *
- * @param inputState Pointer to the `InputState` structure, which contains 
- *                   the application's current state and parser function.
+ * @param inputState A pointer to the InputState structure, which tracks the input state.
+ * @param leaveAppStateEnumValue The enum value representing exiting current state into the main fsm.
+ *
+ * @note If inputState is NULL or does not have a valid parser function, the function 
+ *       will call updateInputState to set an error state and terminate early.
+ *
+ * @details 
+ * - First, the function checks if inputState is valid; if not, it triggers early termination.
+ * - It prints any relevant error messages based on `inputState->errorState`.
+ * - It prompts the user for input and reads it using `fgets`.
+ * - If the input is too long and exceeds the buffer, it clears the input buffer.
+ * - The newline character is removed to ensure proper string handling.
+ * - Finally, it calls the parser function stored in `inputState->parserFunction` 
+ *   to process the input and determine the next state.
+ *
+ * @note If memory allocation issues occur, or `fgets` fails, the function sets 
+ *       `inputState->errorState` to `-1` and transitions the application to `STATE_SAVE` 
+ *       to ensure graceful termination.
  */
-void get_user_input(InputState *inputState);
+void get_user_input(InputState *inputState, int leaveAppStateEnumValue);
 
 #endif
