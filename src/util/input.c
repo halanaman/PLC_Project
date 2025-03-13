@@ -9,17 +9,18 @@ void clear_input_buffer(void) {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-void updateInputState(InputState *inputState, int errorState, int stateAppState, int appState) {
+void updateInputState(InputState *inputState, int errorState, int stateAppState, int appState, int nextStateNextAppState) {
     if (!inputState) return;
     inputState->errorState = errorState;
     inputState->stateAppState = stateAppState;
     inputState->appState = appState;
+    inputState->nextStateNextAppState = nextStateNextAppState; 
 }
 
 void get_user_input(InputState *inputState, int leaveAppStateEnumValue) {
     char input[MAX_MENU_INPUT_LENGTH + 1]; /** fget() will make last character a new line char */
     if (!inputState || !inputState->parserFunction) {
-        updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE); /*terminates if mem not allocated*/
+        updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE, 0); /*terminates if mem not allocated*/
         return;
     }
 
@@ -44,7 +45,7 @@ void get_user_input(InputState *inputState, int leaveAppStateEnumValue) {
     
     /* Gets input based on input size, clear stdin buffer if needed, then replaces newline character with /0 */
     if (fgets(input, sizeof(input), stdin) == NULL) {
-        updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE);
+        updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE, 0); /*terminates if fgets() fail*/
         return;
     }
     if (strchr(input, '\n') == NULL) {

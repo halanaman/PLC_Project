@@ -11,6 +11,6 @@ typedef enum {
 } HomePageState;
 
 
-void run_home_page(AppState *currentState);
+void run_home_page(AppStateStruct *appStateStruct);
 
 #endif

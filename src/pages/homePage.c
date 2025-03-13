@@ -12,7 +12,7 @@ Process flow on any appState (how run_home_page works)
 1) enter starting state
 2) at each state, function will create, then render page. then wait for human input.
 3) function processes human input to determine next state
-4) right before exiting current appState, function should indicate which appState
+4) right before exiting current appState, function should indicate which appState (+sub-state)
     to go to next.
 
 work flow of creating all pages in any appState
@@ -29,25 +29,28 @@ work flow of creating all pages in any appState
 3) write a parser function that can help process inputs into meaningful results, so you can update
     your inputState object to help determine next step for the fsms.
 4) write the run_appState function
-    (-a) initialise inputState, which represents how your appState_fsm/parser can interact with your
-            appState_fsm/main_fsm/ error message
-    (a) enter appState_fsm, which should accept the state of main fsm as input
+    (-b) initialise inputState, which represents how your appState_fsm/parser can interact with your
+            appState_fsm/main_fsm/ error message. 
+    (-a) set the starting sub-state of the current page.
+    (a) enter appState_fsm.
     (b) for each state in appState_fsm, you will: 
         - create display page for that state, render it. (page will be freed in render function)
-        - look for input to move into the next state
+        - process inputs using sub-state specific parser function
+        - use updateInputState() to indicate what the next sub-state is. 
     (c) if appState_fsm moves to a state that requires it to exit current appState, make sure function
-        updates the state of main fsm before exiting, so main fsm knows which state to go next.
+        calls update_app_state_struct() to update the state of main fsm before exiting, so main fsm knows where to go next.
 */
 
 void homePageMenuParser(InputState *inputState, char *input) {
     if (strcmp(input, "1") == 0) {
-        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_POKEDEX);
+        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_POKEDEX, 0);
     } else if (strcmp(input, "2") == 0) {
-        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_ADVENTURE);
+        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_ADVENTURE, 0);
     } else if (strcmp(input, "3") == 0) {
-        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_SAVE);
+        updateInputState(inputState, 0, EXIT_HOMEPAGE, STATE_SAVE, 0);
     } else {
-        updateInputState(inputState, 1, SHOW_HOMEPAGE, STATE_HOME);
+        /** This means invalid input, and appropriate error message should be shown */
+        updateInputState(inputState, 1, SHOW_HOMEPAGE, STATE_HOME, 0);
     }
 }
 
@@ -77,7 +80,7 @@ Page *create_home_page(void) {
     return homePage;
 }
 
-void run_home_page(AppState *currentAppState) {
+void run_home_page(AppStateStruct *appStateStruct) {
     Page *homePage;
     InputState inputState = {
         .errorState = 0,
@@ -86,8 +89,11 @@ void run_home_page(AppState *currentAppState) {
         .parserFunction = &homePageMenuParser,
         .previousInput = ""
     };
-
-    HomePageState homePageState = SHOW_HOMEPAGE;
+    /**
+     * Here we are copying the starting state of homePage fsm by using
+     * nextStateNextAppState, not assigning them to the same address.
+     */
+    HomePageState homePageState = appStateStruct->nextStateNextAppState;
 
     while (homePageState != EXIT_HOMEPAGE) {
         switch(homePageState) {
@@ -95,13 +101,13 @@ void run_home_page(AppState *currentAppState) {
                 homePage = create_home_page();
                 if (!homePage) {
                     homePageState = EXIT_HOMEPAGE;
-                    *currentAppState = STATE_SAVE;
+                    update_app_state_struct(appStateStruct, STATE_SAVE, 0); /** Called this because function is leaving homePage */
                     break;
                 }
                 render_page(homePage);
                 get_user_input(&inputState, EXIT_HOMEPAGE);
                 homePageState = inputState.stateAppState;
-                *currentAppState = inputState.appState;   
+                update_app_state_struct(appStateStruct, inputState.appState, inputState.nextStateNextAppState); /** Called this because function is leaving homePage */
                 break;
             case EXIT_HOMEPAGE:
                 break;

@@ -15,6 +15,7 @@ typedef struct InputState {
     int stateAppState; /** Represents state of appState_fsm. There is no safety check at compile time, so please ensure you use this correctly.*/
     void (*parserFunction)(struct InputState *inputState, char *input);
     char *previousInput; /*for debugging purpose*/
+    int nextStateNextAppState;
 } InputState;
 
 /**
@@ -32,13 +33,17 @@ void clear_input_buffer(void);
  * This function modifies the `InputState` structure by updating its error state, 
  * application state, and sub-state (`stateAppState`). It is used to manage the 
  * application's flow based on user input.
+ * 
+ * Always set nextStateNextAppState to 0, unless you want to dictate the sub-state of
+ * the main_fsm's new state.
  *
  * @param inputState Pointer to the `InputState` structure to be updated.
  * @param errorState New error state value.
- * @param stateAppState New stateAppState value (represents sub-state within a page).
+ * @param stateAppState New stateAppState value of current appState(represents sub-state within a page).
  * @param appState New appState value (represents high-level application state).
+ * @param nextStateNextAppState New stateAppState value of next appState(also represents sub-state within a page).
  */
-void updateInputState(InputState *inputState, int errorState, int stateAppState, int appState);
+void updateInputState(InputState *inputState, int errorState, int stateAppState, int appState, int nextStateNextAppState);
 
 /**
  * @brief Handles user input and updates the application state accordingly.

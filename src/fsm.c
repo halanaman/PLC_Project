@@ -4,6 +4,12 @@
 #include "util/input.h"
 #include "util/page.h" /*temp until we figure where to place clear_screen() */
 
+void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppState, int nextStateNextAppState) {
+    if (!appStateStruct) return;
+    appStateStruct->nextAppState = nextAppState;
+    appStateStruct->nextStateNextAppState = nextStateNextAppState;
+}
+
 /**
  * place init logic here, initial loading from db etc
  */
@@ -22,14 +28,15 @@ int temp_get_user_input(void) {
     return choice;
 }
 
-void run_main_fsm(AppState *currentState) {
+void run_main_fsm(AppStateStruct *appStateStruct) {
     int choice; /* placeholder until logic for other states are placed into their own file*/
-    
+    AppState *currentState;
+    currentState = &(appStateStruct->nextAppState);
     init_fsm();
     while (*currentState != STATE_EXIT) {
         switch (*currentState) {
             case STATE_HOME:
-                run_home_page(currentState);
+                run_home_page(appStateStruct);
                 break;
 
             case STATE_POKEDEX:
