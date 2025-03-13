@@ -17,7 +17,7 @@ void updateInputState(InputState *inputState, int errorState, int stateAppState,
 }
 
 void get_user_input(InputState *inputState, int leaveAppStateEnumValue) {
-    char input[MAX_MENU_INPUT_LENGTH + 1];
+    char input[MAX_MENU_INPUT_LENGTH + 1]; /** fget() will make last character a new line char */
     if (!inputState || !inputState->parserFunction) {
         updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE); /*terminates if mem not allocated*/
         return;
@@ -42,7 +42,7 @@ void get_user_input(InputState *inputState, int leaveAppStateEnumValue) {
     }
     printf("\nEnter choice: ");
     
-    /* Gets input, does initial parsing of removing newline and limiting final input size */
+    /* Gets input based on input size, clear stdin buffer if needed, then replaces newline character with /0 */
     if (fgets(input, sizeof(input), stdin) == NULL) {
         updateInputState(inputState, -1, leaveAppStateEnumValue, STATE_SAVE);
         return;
