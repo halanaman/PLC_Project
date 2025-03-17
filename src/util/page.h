@@ -70,14 +70,14 @@ RenderedBlocks *create_blocks (int numBlocks);
  * Assumes that blocks are added in correct order, if not render_page() will display incorrect behaviour.
  * If addition of new block goes over the SCREEN_HEIGHT, block will not be added.
  *
- * @param index The index where the block should be added.
  * @param renderedBlocks Pointer to the RenderedBlocks structure.
+ * @param index The index where the block should be added.
  * @param rowToRenderBlock The starting row where this block will be rendered.
  * @param numRows Number of rows in the block.
  * @param numCols Number of columns in the block.
  * @param displayText The text content to be displayed inside the block.
  */
-void add_block_to_blocks(int index, RenderedBlocks *renderedBlocks, int rowToRenderBlock, int numRows, int numCols, DisplayStrings displayText);
+void add_block_to_blocks(RenderedBlocks *renderedBlocks, int index, int rowToRenderBlock, int numRows, int numCols, DisplayStrings displayText);
 
 
 /**

@@ -28,7 +28,7 @@ RenderedBlocks *create_blocks(int numBlocks) {
     return renderedBlocks;
 }
 
-void add_block_to_blocks(int index, RenderedBlocks *renderedBlocks, int rowToRenderBlock, int numRows, int numCols, DisplayStrings displayText) {
+void add_block_to_blocks(RenderedBlocks *renderedBlocks, int index, int rowToRenderBlock, int numRows, int numCols, DisplayStrings displayText) {
     int i;
     RenderedBlock *block;
 

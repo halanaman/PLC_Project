@@ -27,12 +27,14 @@ typedef struct {
  *
  * @param appStateStruct Pointer to the `AppStateStruct` to be updated.
  * @param nextAppState The new application state to assign to `appState`.
- * @param nextStateAppState The new state to assign to `nextStateAppState`.
+ * @param nextStateNextAppState The new sub-state to assign to `nextStateNextAppState`.
  *
  * @note This function does nothing if `appStateStruct` is NULL.
  */
 void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppState, int nextStateNextAppState);
+
 void init_fsm(void);
+
 void run_main_fsm(AppStateStruct *appStateStruct);
 
 #endif

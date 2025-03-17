@@ -65,11 +65,20 @@ Page *create_home_page(void) {
         "│ ACTION_3: Save & Exit     │\n",
         "└───────────────────────────┘\n"
     };
+    /**
+    DisplayStrings blockOneText = {
+        "this is the second block\n",
+        "this is second row of second block\n"
+    };
+    */
+
     homePageBlocks = create_blocks(1);
     if (!homePageBlocks) return NULL;
 
     /** blockZeroText will be rendered starting from 0th to 5th row (height == 6). */
-    add_block_to_blocks(0, homePageBlocks, 0, 6, SCREEN_LENGTH, blockZeroText);
+    add_block_to_blocks(homePageBlocks, 0, 0, 6, SCREEN_LENGTH, blockZeroText);
+    /** this means that blockOneText will be rendered starting from 6th row to 7th row (height == 2) */
+    /** add_block_to_blocks(homePageBlocks, 1, 6, 2, SCREEN_LENGTH, blockOneText); */
 
     homePage = create_page("home", homePageBlocks);
     if (!homePage) {
@@ -93,7 +102,7 @@ void run_home_page(AppStateStruct *appStateStruct) {
      * Here we are copying the starting state of homePage fsm by using
      * nextStateNextAppState, not assigning them to the same address.
      */
-    HomePageState homePageState = appStateStruct->nextStateNextAppState;
+    HomePageState homePageState = (HomePageState) appStateStruct->nextStateNextAppState;
 
     while (homePageState != EXIT_HOMEPAGE) {
         switch(homePageState) {
