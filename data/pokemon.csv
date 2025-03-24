@@ -1,11 +1,11 @@
-﻿ID,Name,Type,HP,Atk,Def,Spd,Acc,Description
-001,Bulbasaur,Grass/Poison,45,49,49,45,100%,A seed Pokémon that grows stronger with sunlight.
-002,Ivysaur,Grass/Poison,60,62,63,60,100%,"When the bulb on its back blooms, it becomes more powerful."
+﻿ID,Name,Type,HP,Atk,Def,Spd,Acc,Desc
+001,Bulbasaur,Grass/Poison,45,49,49,45,100%,A seed Pokemon that grows stronger with sunlight.
+002,Ivysaur,Grass/Poison,60,62,63,60,100%,"When the bulb on its back blooms- it becomes more powerful."
 003,Venusaur,Grass/Poison,80,82,83,80,100%,Its flower absorbs sunlight and releases energy in battle.
 004,Charmander,Fire,39,52,43,65,100%,Its tail flame shows its health and mood. A weak flame means weakness.
-005,Charmeleon,Fire,58,64,58,80,100%,A more aggressive Pokémon with a stronger flame.
+005,Charmeleon,Fire,58,64,58,80,100%,A more aggressive Pokemon with a stronger flame.
 006,Charizard,Fire/Flying,78,84,78,100,100%,It can fly and breathe fire hot enough to melt boulders.
 007,Squirtle,Water,44,48,65,43,100%,Shoots water from its shell to attack enemies.
 008,Wartortle,Water,59,63,80,58,100%,Uses its furry tail for balance while swimming.
 009,Blastoise,Water,79,83,100,78,100%,Has powerful water cannons on its shell for attacking.
-010,Caterpie,Bug,45,30,35,45,100%,A small bug Pokémon that releases a stinky scent to repel enemies.
+010,Caterpie,Bug,45,30,35,45,100%,A small bug Pokemon that releases a stinky scent to repel enemies.
