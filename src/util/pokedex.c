@@ -42,4 +42,5 @@ Pokedex createPokedex(int size) {
 void deletePokedex(Pokedex *pokedex) {
     free(pokedex->pokedexList);
     free(pokedex->pokemonList);
+    pokedex->size = 0;
 }
