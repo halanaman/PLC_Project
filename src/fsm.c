@@ -3,6 +3,9 @@
 #include "pages/homePage.h"
 #include "util/input.h"
 #include "util/page.h" /*temp until we figure where to place clear_screen() */
+#include "util/db.h"
+
+Pokedex pokedex;
 
 void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppState, int nextStateNextAppState) {
     if (!appStateStruct) return;
@@ -14,7 +17,9 @@ void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppSta
  * place init logic here, initial loading from db etc
  */
 void init_fsm(void) {
-    /** 2) LOAD DB HERE */
+    /* LOAD DB HERE */
+    const char *savefile = "data/pokedex.dat";
+    loadPokedex(&pokedex, savefile);
     printf("Starting Pokedex...\n");
 }
 
