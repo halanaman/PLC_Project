@@ -6,20 +6,12 @@
 #include "../util/pokedex.h"
 #include "../util/db.h"
 
+Pokedex pokedex;
+const char *filename = "../../data/pokemon.csv";
+const char *savefile = "../../data/pokedex.dat";
+
 int main(int argc, char ** argv) {
-    Pokedex pokedex;
-    const char *filename = "../../data/pokemon.csv";
-    const char *savefile = "../../data/pokedex.dat";
-
-    /* Count lines to allocate memory */
-    int numPokemon = countLinesInFile(filename);
-    if (numPokemon <= 0) {
-        printf("No data found.\n");
-        return 1;
-    }
-
-    pokedex = createPokedex(numPokemon);
-
+    
     /* Convert csv to Pokedex */
     loadPokedexFromCSV(&pokedex, filename);
 
@@ -28,8 +20,6 @@ int main(int argc, char ** argv) {
 
     /* Save Pokedex to a binary file*/
     savePokedex(&pokedex, savefile);
-
-    deletePokedex(&pokedex);
 
     return 0;
 }

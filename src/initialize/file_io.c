@@ -32,12 +32,23 @@ int countLinesInFile(const char *filename) {
 }
 
 void loadPokedexFromCSV(Pokedex *pokedex, const char *filename) {
+    int numPokemon;
+    FILE *file;
     char buffer[MAX_LINE_LENGTH];
     int index;
-    Pokemon p;
     char *token;
+    Pokemon p;
+    
+    /* Count lines to allocate memory */
+    numPokemon = countLinesInFile(filename);
+    if (numPokemon <= 0) {
+        printf("No data found.\n");
+        exit(1);
+    }
 
-    FILE *file = fopen(filename, "r");
+    *pokedex = createPokedex(numPokemon);
+
+    file = fopen(filename, "r");
     if (!file) {
         perror("Error opening file");
         exit(1);

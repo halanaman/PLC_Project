@@ -21,6 +21,7 @@ int countLinesInFile(const char *filename);
 /**
  * Loads Pokedex data from a csv file
  * Input: Pokedex, filename(csv file)
+ * Notes: Memory will be allocated for Pokedex, use deletePokedex if needed
  */
 void loadPokedexFromCSV(Pokedex *pokedex, const char *filename);
 

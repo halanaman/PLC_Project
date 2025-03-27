@@ -21,6 +21,10 @@ int savePokedex(Pokedex *pokedex, const char *filename) {
     fwrite(pokedex->pokemonList, sizeof(Pokemon), pokedex->size, file);
     
     fclose(file);
+
+    /* Free Memory */
+    deletePokedex(pokedex);
+
     return 0;
 }
 
