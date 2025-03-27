@@ -44,3 +44,5 @@ void deletePokedex(Pokedex *pokedex) {
     free(pokedex->pokemonList);
     pokedex->size = 0;
 }
+
+

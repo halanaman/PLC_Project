@@ -20,3 +20,5 @@ int savePokedex(Pokedex *pokedex, const char *filename);
 int loadPokedex(Pokedex *pokedex, const char *filename);
 
 #endif
+
+
