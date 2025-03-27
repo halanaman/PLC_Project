@@ -14,6 +14,7 @@ void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppSta
  * place init logic here, initial loading from db etc
  */
 void init_fsm(void) {
+    /** 2) LOAD DB HERE */
     printf("Starting Pokedex...\n");
 }
 
@@ -30,6 +31,10 @@ int temp_get_user_input(void) {
 
 void run_main_fsm(AppStateStruct *appStateStruct) {
     int choice; /* placeholder until logic for other states are placed into their own file*/
+    /** 1) initialise the struct/ list to store pokemonlist pokemon info here. I will use it 
+     * in STATE_POKEDEX switch statement 
+     * 
+     */
     AppState *currentState;
     currentState = &(appStateStruct->nextAppState);
     init_fsm();
@@ -64,6 +69,7 @@ void run_main_fsm(AppStateStruct *appStateStruct) {
             */
             case STATE_SAVE:
                 clear_screen();
+                /** 3) SAVE DB HERE */
                 printf("Saving Game...\n");
                 printf("Exiting Game...\n");
                 *currentState = STATE_EXIT;
