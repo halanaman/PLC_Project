@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "pokedex.h": "c"
+        "pokedex.h": "c",
+        "locale.h": "c",
+        "page.h": "c"
     }
 }

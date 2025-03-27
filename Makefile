@@ -1,13 +1,37 @@
+# Compiler
 CC = gcc
-CFLAGS = -Wall -Werror -ansi -pedantic
-TARGET = program
-SRC = src/main.c
+CFLAGS = -Wall -Werror -I./src/homePage -I./src/util/page
+CFLAGS_ANSI = -ansi -pedantic $(CFLAGS)  # CFLAGS with -ansi (default)
+# CFLAGS_ANSI = $(CFLAGS)  # CFLAGS with -ansi (default)
 
-all: $(TARGET)
-	./$(TARGET)  # Runs the compiled program automatically
+# Directories
+SRC_DIR = src
+OBJ_DIR = obj
 
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+# Source files
+SRC = src/main.c \
+      src/fsm.c \
+      src/pages/homePage.c \
+      src/util/page.c \
+      src/util/input.c \
+      src/util/constants.c
 
+# Object files (convert .c to .o inside obj/)
+OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
+
+# Executable file
+TARGET = pokedex.exe
+
+# Default rule: Build everything with -ansi
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS_ANSI) $(OBJ) -o $(TARGET)
+
+# Rule to compile each source file into object files (normal build with -ansi)
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(OBJ_DIR)/src/pages $(OBJ_DIR)/src/util  # Ensure obj directories exist
+	$(CC) $(CFLAGS_ANSI) -c $< -o $@
+
+# Clean-up rule
+.PHONY: clean
 clean:
-	rm -f $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
