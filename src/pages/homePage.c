@@ -91,18 +91,19 @@ Page *create_home_page(void) {
 
 void run_home_page(AppStateStruct *appStateStruct) {
     Page *homePage;
-    InputState inputState = {
-        .errorState = 0,
-        .appState = STATE_HOME,
-        .stateAppState = SHOW_HOMEPAGE,
-        .parserFunction = &home_page_menu_parser,
-        .previousInput = ""
-    };
+    InputState inputState;
+    HomePageState homePageState;
+
+    inputState.errorState = 0;
+    inputState.appState = STATE_HOME;
+    inputState.stateAppState = SHOW_HOMEPAGE;
+    inputState.parserFunction = &home_page_menu_parser;
+    inputState.previousInput = "";
     /**
      * Here we are copying the starting state of homePage fsm by using
      * nextStateNextAppState, not assigning them to the same address.
      */
-    HomePageState homePageState = (HomePageState) appStateStruct->nextStateNextAppState;
+    homePageState = (HomePageState) appStateStruct->nextStateNextAppState;
 
     while (homePageState != EXIT_HOMEPAGE) {
         switch(homePageState) {

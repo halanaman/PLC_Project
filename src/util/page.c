@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -128,6 +129,12 @@ void clear_screen(void) {
     #endif
 }
 
+/* Warning: Very crude approximation */
+int simple_wcwidth(wchar_t wc) {
+    if (wc < 128) return 1; /* ASCII */
+    return 2; /* assume wide char */
+}
+
 int get_display_width(const char *str) {
     int i, w, width;
     wchar_t wideStr[100];   /*Temporary buffer*/
@@ -136,7 +143,7 @@ int get_display_width(const char *str) {
 
     width = 0;
     for (i = 0; wideStr[i] != L'\0'; i++) {
-        w = wcwidth(wideStr[i]);
+        w = simple_wcwidth(wideStr[i]);
         if (w > 0) width += w;  /*Count only valid display characters*/
     }
     return width;
