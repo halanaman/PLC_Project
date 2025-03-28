@@ -6,6 +6,7 @@
 #include "util/db.h"
 
 Pokedex pokedex;
+const char *savefile = "data/pokedex.dat";
 
 void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppState, int nextStateNextAppState) {
     if (!appStateStruct) return;
@@ -18,7 +19,6 @@ void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppSta
  */
 void init_fsm(void) {
     /* LOAD DB HERE */
-    const char *savefile = "data/pokedex.dat";
     loadPokedex(&pokedex, savefile);
     printf("Starting Pokedex...\n");
 }
@@ -74,7 +74,8 @@ void run_main_fsm(AppStateStruct *appStateStruct) {
             */
             case STATE_SAVE:
                 clear_screen();
-                /** 3) SAVE DB HERE */
+                /** SAVE DB HERE */
+                savePokedex(&pokedex, savefile);
                 printf("Saving Game...\n");
                 printf("Exiting Game...\n");
                 *currentState = STATE_EXIT;
