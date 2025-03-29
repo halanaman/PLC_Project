@@ -116,7 +116,7 @@ void render_blocks(RenderedBlocks *renderedBlocks) {
 
 void render_page(Page *page) {
     if (!page) return;
-    clear_screen();
+    clear_screen();  /*comment this out to help debug rendering issues*/
     render_blocks(page->renderedBlocks);
     free_page(page);
 }

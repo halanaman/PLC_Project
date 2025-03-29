@@ -1,6 +1,10 @@
 #ifndef FSM_H
 #define FSM_H
 
+#include "util/pokedex.h"
+
+extern Pokedex pokedex;
+
 typedef enum {
     STATE_HOME,
     STATE_POKEDEX,

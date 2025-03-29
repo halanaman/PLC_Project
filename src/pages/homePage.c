@@ -41,6 +41,13 @@ work flow of creating all pages in any appState
         calls update_app_state_struct() to update the state of main fsm before exiting, so main fsm knows where to go next.
 */
 
+void initialize_home_page_data(InputState *inputState) {
+    inputState->errorState = 0;
+    inputState->appState = STATE_HOME;
+    inputState->stateAppState = SHOW_HOMEPAGE;
+    inputState->parserFunction = &home_page_menu_parser;
+}
+
 void home_page_menu_parser(InputState *inputState, char *input) {
     if (strcmp(input, "1") == 0) {
         update_input_state(inputState, 0, EXIT_HOMEPAGE, STATE_POKEDEX, 0);
@@ -60,9 +67,9 @@ Page *create_home_page(void) {
     DisplayStrings blockZeroText = {
         "Home Page\n",
         "┌───────────────────────────┐\n",
-        "│ ACTION_1: View Pokédex    │\n",
-        "│ ACTION_2: Adventure       │\n",
-        "│ ACTION_3: Save & Exit     │\n",
+        "│ 1: View Pokédex           │\n",
+        "│ 2: Adventure              │\n",
+        "│ 3: Save & Exit            │\n",
         "└───────────────────────────┘\n"
     };
     /**
@@ -94,11 +101,7 @@ void run_home_page(AppStateStruct *appStateStruct) {
     InputState inputState;
     HomePageState homePageState;
 
-    inputState.errorState = 0;
-    inputState.appState = STATE_HOME;
-    inputState.stateAppState = SHOW_HOMEPAGE;
-    inputState.parserFunction = &home_page_menu_parser;
-    inputState.previousInput = "";
+    initialize_home_page_data(&inputState);
     /**
      * Here we are copying the starting state of homePage fsm by using
      * nextStateNextAppState, not assigning them to the same address.

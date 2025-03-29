@@ -35,10 +35,10 @@ void get_user_input(InputState *inputState, int leaveAppStateEnumValue) {
             printf("Invalid input, try again!");
             break;
         case 2:
-            printf("custom error");
+            printf("Pokemon with this number does not exist.");
             break;
         case 3:
-            printf("custom error");
+            printf("Memory allocation error. Try again.");
             break;
     }
     printf("\nEnter choice: ");

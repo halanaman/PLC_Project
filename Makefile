@@ -2,6 +2,7 @@
 CC = gcc
 CFLAGS = -Wall -Werror -I./src/homePage -I./src/util/page
 CFLAGS_ANSI = -ansi -pedantic $(CFLAGS)  # CFLAGS with -ansi (default)
+# CFLAGS_ANSI = $(CFLAGS)  # CFLAGS with -ansi (default)
 
 # Directories
 SRC_DIR = src
@@ -11,6 +12,7 @@ OBJ_DIR = obj
 SRC = src/main.c \
       src/fsm.c \
       src/pages/homePage.c \
+      src/pages/pokedexPage.c \
       src/util/page.c \
       src/util/input.c \
       src/util/constants.c \

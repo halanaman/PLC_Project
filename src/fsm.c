@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include "fsm.h"
 #include "pages/homePage.h"
+#include "pages/pokedexPage.h"
 #include "util/input.h"
 #include "util/page.h" /*temp until we figure where to place clear_screen() */
 #include "util/db.h"
 
 Pokedex pokedex;
+
 const char *savefile = "data/pokedex.dat";
 
 void update_app_state_struct(AppStateStruct *appStateStruct, AppState nextAppState, int nextStateNextAppState) {
@@ -50,13 +52,7 @@ void run_main_fsm(AppStateStruct *appStateStruct) {
                 break;
 
             case STATE_POKEDEX:
-                clear_screen();
-                printf("Rendering Pokédex Page...\n");
-                printf("Enter choice (1: Home, 2: Adventure, 3: Exit): ");
-                choice = temp_get_user_input();
-                if (choice == 1) *currentState = STATE_HOME;
-                else if (choice == 2) *currentState = STATE_ADVENTURE;
-                else if (choice == 3) *currentState = STATE_SAVE;
+                run_pokedex_page(appStateStruct);
                 break;
 
             case STATE_ADVENTURE:
