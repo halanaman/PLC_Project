@@ -15,6 +15,7 @@ typedef enum {
 typedef struct {
     InputState globalInputState;
     int lowestIndexDisplayed; /* This represents the first index of the pokemon showed on pokedex list page*/
+    /* int selectedPokemon; // To represent which pokemon should be viewed in SHOW_POKEMONCARD state */
 } PokedexPageInputState;
 
 void pokedex_list_page_parser(InputState *inputState, char *input);

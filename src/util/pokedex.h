@@ -1,8 +1,6 @@
 #ifndef POKEDEX_H
 #define POKEDEX_H
 
-#define MAX_NAME_LENGTH 20
-
 #include "pokemon.h"
 
 /**
@@ -10,7 +8,7 @@
  */
 typedef struct {
     int id;
-    char name[MAX_NAME_LENGTH];
+    char name[MAX_POKEMON_NAME_LENGTH];
     int seen;
 } PokedexListItem;
 

@@ -10,6 +10,7 @@
 #include "../util/pokedex.h"
 
 #define POKEMON_LIST_MAX_ROWS 8
+#define MAX_COLUMNS_PER_ENTRY 16
 
 /* Helper functions */
 void initialize_pokedex_page_data(PokedexPageInputState *inputState, PokedexPageState *pokedexPageState, AppStateStruct *appStateStruct) {
@@ -44,9 +45,9 @@ void create_pokemon_list_string_array(PokedexListItem *pokemonList, DisplayStrin
         /* assign pokemon name for column 1*/
         indexOnePokemonList = i + startIndex;
         if (pokemonList[indexOnePokemonList].seen < 1)
-            snprintf(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, 16, "-----");
+            snprintf(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, MAX_COLUMNS_PER_ENTRY, "-----");
         else
-            snprintf(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, 16, pokemonList[indexOnePokemonList].name);
+            snprintf(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, MAX_COLUMNS_PER_ENTRY, pokemonList[indexOnePokemonList].name);
         
         /* assign pokemon name for column 2 if relevant*/
         if (i >= rowsInColumnTwo) {
@@ -54,9 +55,9 @@ void create_pokemon_list_string_array(PokedexListItem *pokemonList, DisplayStrin
         } else {
             indexTwoPokemonList = indexOnePokemonList + POKEMON_LIST_MAX_ROWS;
             if (pokemonList[indexTwoPokemonList].seen < 1)
-                snprintf(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, 16,"-----");
+                snprintf(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, MAX_COLUMNS_PER_ENTRY,"-----");
             else
-                snprintf(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, 16, pokemonList[indexTwoPokemonList].name);
+                snprintf(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, MAX_COLUMNS_PER_ENTRY, pokemonList[indexTwoPokemonList].name);
         }
         /* assign row string to relevant row of pokemonListText*/
         snprintf(
@@ -115,6 +116,8 @@ Page *create_pokedex_list_page(int lowestIndexDisplayed) {
     PokedexListItem *pokemonList;
     RenderedBlocks *pokedexPageBlocks;
     Page *pokedexListPage; 
+
+    /* Init display strings */
     DisplayStrings blockZeroText = {"Pokedex List\n"};
     DisplayStrings blockOneText;
     DisplayStrings blockTwoText = {
@@ -131,9 +134,9 @@ Page *create_pokedex_list_page(int lowestIndexDisplayed) {
     if (lowestIndexDisplayed + 16 >= pokedex.size)
         snprintf(blockTwoText[1], SCREEN_LENGTH_BYTES, "│ 1: Next Pokedex Page     (NA)│\n");
     pokemonList = pokedex.pokedexList;
-    /* create blocks/ page */
     create_pokemon_list_string_array(pokemonList, blockOneText, lowestIndexDisplayed);
 
+    /* create blocks/ page */
     pokedexPageBlocks = create_blocks(3);
     if (!pokedexPageBlocks) return NULL;
 
@@ -161,6 +164,7 @@ void run_pokedex_page(AppStateStruct *appStateStruct) {
         &pokedexPageState, 
         appStateStruct
     );
+    /* Typecast specialized PokedexPageInputState back to InputState, because get_user_input() only accepts type InputState*/
     baseInputState = (InputState *) &inputState;
 
     while (pokedexPageState != EXIT_POKEDEXPAGE) {
