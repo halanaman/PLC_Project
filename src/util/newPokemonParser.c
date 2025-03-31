@@ -4,6 +4,7 @@
 #include "pokemon.h"
 #include <ctype.h>
 #include <stdlib.h>
+#include "../util/constants.h"
 
 /**
  * id: given by program
@@ -73,7 +74,7 @@ int processPokemonNameInput(const char *inputPokemonName, char *outputPokemonNam
     int isValid;
     isValid = isInputValueValid(inputPokemonName, pokemonNamePattern, MAX_POKEMON_NAME_LENGTH);
     if (isValid == 1) 
-        snprintf(outputPokemonName, MAX_POKEMON_NAME_LENGTH + 1, "%s", inputPokemonName);
+        snprintf_implement(outputPokemonName, MAX_POKEMON_NAME_LENGTH + 1, "%s", inputPokemonName);
     
     return isValid;
 }
@@ -90,7 +91,7 @@ int processPokemonTypeInput(const char *inputPokemonType, char *outputPokemonTyp
     if (isValid == 0) return 0;
 
     /* copy input string to buffer */
-    snprintf(inputString, MAX_2_POKEMON_TYPE_LENGTH + 1, "%s", inputPokemonType);
+    snprintf_implement(inputString, MAX_2_POKEMON_TYPE_LENGTH + 1, "%s", inputPokemonType);
 
     token = strtok(inputString, "/");
     for (i = 0; token != NULL; i++) {
@@ -109,12 +110,12 @@ int processPokemonTypeInput(const char *inputPokemonType, char *outputPokemonTyp
             if (strcmp(token, acceptedPokemonTypes[j]) == 0) {
                 found = 1;
                 if (i == 0) {
-                    snprintf(outputPokemonType1, MAX_POKEMON_TYPE_LENGTH + 1, "%s", token);
+                    snprintf_implement(outputPokemonType1, MAX_POKEMON_TYPE_LENGTH + 1, "%s", token);
                     break;
                 } else if (i == 1) {
                     /* invalid if 1st and 2nd token have the same value */
                     if (strcmp(token, outputPokemonType1) == 0) return 0;
-                    snprintf(outputPokemonType2, MAX_POKEMON_TYPE_LENGTH + 1, "%s", token);
+                    snprintf_implement(outputPokemonType2, MAX_POKEMON_TYPE_LENGTH + 1, "%s", token);
                     break;
                 } 
             }
@@ -140,7 +141,7 @@ int processPokemonDescriptionInput(const char *inputPokemonDescription, char *ou
     int isValid;
     isValid = isInputValueValid(inputPokemonDescription, pokemonDescriptionPattern, MAX_POKEMON_DESC_LENGTH);
     if (isValid == 1) 
-        snprintf(outputPokemonDescription, MAX_POKEMON_DESC_LENGTH + 1, "%s", inputPokemonDescription);
+        snprintf_implement(outputPokemonDescription, MAX_POKEMON_DESC_LENGTH + 1, "%s", inputPokemonDescription);
     return isValid;
 }
 

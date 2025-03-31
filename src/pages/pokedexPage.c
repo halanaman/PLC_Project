@@ -8,9 +8,17 @@
 #include <regex.h>
 #include "../fsm.h"
 #include "../util/pokedex.h"
+#include "../util/constants.h"
 
 #define POKEMON_LIST_MAX_ROWS 8
 #define MAX_COLUMNS_PER_ENTRY 16
+
+/**
+ * TODO
+ * - what happen if i want to view a pokemon that has not been seen? 
+ * should i reject input on this page, or navigate to view pokemon, and view pokemon handles unseen pokemon?
+ * - should we add a total_seen count in pokedex.c?
+ */
 
 /* Helper functions */
 void initialize_pokedex_page_data(PokedexPageInputState *inputState, PokedexPageState *pokedexPageState, AppStateStruct *appStateStruct) {
@@ -39,28 +47,28 @@ void create_pokemon_list_string_array(PokedexListItem *pokemonList, DisplayStrin
 
     for (i = 0; i < 8; i++) {
         /* clear current row and replace with default of newline first*/
-        snprintf(pokemonListText[i],sizeof(char) * 2, "\n");
+        snprintf_implement(pokemonListText[i],sizeof(char) * 2, "\n");
         if (i >= rowsInColumnOne) continue;
 
         /* assign pokemon name for column 1*/
         indexOnePokemonList = i + startIndex;
         if (pokemonList[indexOnePokemonList].seen < 1)
-            snprintf(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, MAX_COLUMNS_PER_ENTRY, "-----");
+            snprintf_implement(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, MAX_COLUMNS_PER_ENTRY, "-----");
         else
-            snprintf(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, MAX_COLUMNS_PER_ENTRY, pokemonList[indexOnePokemonList].name);
+            snprintf_implement(columnOneName, sizeof(columnOneName), "%03d %-*s", indexOnePokemonList + 1, MAX_COLUMNS_PER_ENTRY, pokemonList[indexOnePokemonList].name);
         
         /* assign pokemon name for column 2 if relevant*/
         if (i >= rowsInColumnTwo) {
-            snprintf(columnTwoName, sizeof(columnTwoName), "");
+            snprintf_implement(columnTwoName, sizeof(columnTwoName), "");
         } else {
             indexTwoPokemonList = indexOnePokemonList + POKEMON_LIST_MAX_ROWS;
             if (pokemonList[indexTwoPokemonList].seen < 1)
-                snprintf(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, MAX_COLUMNS_PER_ENTRY,"-----");
+                snprintf_implement(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, MAX_COLUMNS_PER_ENTRY,"-----");
             else
-                snprintf(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, MAX_COLUMNS_PER_ENTRY, pokemonList[indexTwoPokemonList].name);
+                snprintf_implement(columnTwoName, sizeof(columnTwoName), "%03d %-*s", indexTwoPokemonList + 1, MAX_COLUMNS_PER_ENTRY, pokemonList[indexTwoPokemonList].name);
         }
         /* assign row string to relevant row of pokemonListText*/
-        snprintf(
+        snprintf_implement(
             pokemonListText[i], 
             sizeof(pokemonListText[i]),
             "%s%s\n",
@@ -130,9 +138,9 @@ Page *create_pokedex_list_page(int lowestIndexDisplayed) {
         "└──────────────────────────────┘\n"
     };
     if (lowestIndexDisplayed == 0)
-        snprintf(blockTwoText[2], SCREEN_LENGTH_BYTES, "│ 2: Previous Pokedex Page (NA)│\n");
+        snprintf_implement(blockTwoText[2], SCREEN_LENGTH_BYTES, "│ 2: Previous Pokedex Page (NA)│\n");
     if (lowestIndexDisplayed + 16 >= pokedex.size)
-        snprintf(blockTwoText[1], SCREEN_LENGTH_BYTES, "│ 1: Next Pokedex Page     (NA)│\n");
+        snprintf_implement(blockTwoText[1], SCREEN_LENGTH_BYTES, "│ 1: Next Pokedex Page     (NA)│\n");
     pokemonList = pokedex.pokedexList;
     create_pokemon_list_string_array(pokemonList, blockOneText, lowestIndexDisplayed);
 
