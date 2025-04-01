@@ -2,6 +2,7 @@
 #include "fsm.h"
 #include "pages/homePage.h"
 #include "pages/pokedexPage.h"
+#include "pages/adventurePage.h"
 #include "util/input.h"
 #include "util/page.h" /*temp until we figure where to place clear_screen() */
 #include "util/db.h"
@@ -37,7 +38,7 @@ int temp_get_user_input(void) {
 }
 
 void run_main_fsm(AppStateStruct *appStateStruct) {
-    int choice; /* placeholder until logic for other states are placed into their own file*/
+    /*int choice;*/ /* placeholder until logic for other states are placed into their own file*/
     /** 1) initialise the struct/ list to store pokemonlist pokemon info here. I will use it 
      * in STATE_POKEDEX switch statement 
      * 
@@ -56,21 +57,13 @@ void run_main_fsm(AppStateStruct *appStateStruct) {
                 break;
 
             case STATE_ADVENTURE:
-                clear_screen();
-                printf("Rendering Adventure Page...\n");
-                printf("Enter choice (1: Pokédex, 2: Home, 3: Exit): ");
-                choice = temp_get_user_input();
-                if (choice == 1) *currentState = STATE_POKEDEX;
-                else if (choice == 2) *currentState = STATE_HOME;
-                else if (choice == 3) *currentState = STATE_SAVE;
-
+                run_adv_page(appStateStruct);
                 break;
 
-            /* Here you put logic to save progress into db. code will exit the moment gave has been successfully saved
-            */
             case STATE_SAVE:
                 clear_screen();
                 /** SAVE DB HERE */
+                /* Here you put logic to save progress into db. code will exit the moment gave has been successfully saved*/
                 savePokedex(&pokedex, savefile);
                 printf("Saving Game...\n");
                 printf("Exiting Game...\n");

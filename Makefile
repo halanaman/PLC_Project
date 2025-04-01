@@ -13,6 +13,7 @@ SRC = src/main.c \
       src/fsm.c \
       src/pages/homePage.c \
       src/pages/pokedexPage.c \
+      src/pages/adventurePage.c \
       src/util/page.c \
       src/util/input.c \
       src/util/constants.c \
