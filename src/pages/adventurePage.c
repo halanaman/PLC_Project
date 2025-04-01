@@ -11,7 +11,7 @@ void initialize_adv_page_data(InputState *inputState) {
     inputState->errorState = 0;
     inputState->appState = STATE_ADVENTURE;
     inputState->stateAppState = SHOW_ADVPAGE;
-    inputState->parserFunction = NULL;
+    inputState->parserFunction = adv_page_parser;
 }
 
 /* ADV PAGE */
