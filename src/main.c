@@ -32,11 +32,12 @@ void clear_screen()
 
 void update_state(Page *page, char input)
 {
+    PageState prevState = page->currentState;
 	if (input == '0') {page->currentState = MENU;}
     else if (input == '1') {page->currentState = POKEDEX;}
     else if (input == '2') {page->currentState = ADVENTURE;}
     else if (input == '3') {page->currentState = SAVE;}
-    else {page->currentState = -1;}
+    else {printf("Invalid Choice, Try Again...\n");}
 }
 
 void print_options(PageState state)
@@ -52,35 +53,21 @@ void print_options(PageState state)
     }
     else if(state == POKEDEX)
     {
-        printf("_____________________\n");
-        printf("| Pokedex Options:  |\n");
-        printf("| 1. View Pokedex   |\n");
-        printf("| 2. Adventure      |\n");
-        printf("| 3. Save & Exit    |\n");
-        printf("|___________________|\n\n");
+        printf("_____________________________\n");
+        printf("| Pokedex Options:          |\n");
+        printf("| 1. Previous Page          |\n");
+        printf("| 2. Next Page              |\n");
+        printf("| 3. Back to Menu           |\n");
+        printf("| XXX. Access Pokemon #XXX  |\n");
+        printf("|___________________________|\n\n");
     }
     else if(state == ADVENTURE)
     {
-        printf("_____________________\n");
-        printf("| Adventure Options:|\n");
-        printf("| 1. View Pokedex   |\n");
-        printf("| 2. Adventure      |\n");
-        printf("| 3. Save & Exit    |\n");
-        printf("|___________________|\n\n");
-    }
-    else if(state == SAVE)
-    {
-        /* ignore , save state will save and exit */
-        printf(" ");
-    }
-    else
-    {
-        printf("_____________________\n");
-        printf("| Try Again:        |\n");
-        printf("| 1. View Pokedex   |\n");
-        printf("| 2. Adventure      |\n");
-        printf("| 3. Save & Exit    |\n");
-        printf("|___________________|\n\n");
+        printf("_________________________\n");
+        printf("| Adventure Options:    |\n");
+        printf("| 1. Start Adventure    |\n");
+        printf("| 2. Back to Menu       |\n");
+        printf("|_______________________|\n\n");
     }
 }
 
@@ -88,10 +75,10 @@ void print_options(PageState state)
 int main(int argc, char ** argv)
 {
     Page page = {MENU};
-    loadPokedex(&pokedex, savefile);
     running = 1;
-
+    loadPokedex(&pokedex, savefile);
     printf("Pokedex Loaded.\n");
+
     while(running)
     {
         print_options(page.currentState);
@@ -104,7 +91,6 @@ int main(int argc, char ** argv)
         switch (page.currentState) {
             case MENU:
                 printf("Menu:\n");
-                
                 break;
             case POKEDEX:
                 printf("Pokedex:\n");
