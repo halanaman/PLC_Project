@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "file_io.h"
 #include "../util/pokedex.h"
@@ -57,6 +58,7 @@ void loadPokedexFromCSV(Pokedex *pokedex, const char *filename) {
     /* Skip Header Line */
     fgets(buffer, MAX_LINE_LENGTH, file);
 
+    srand(time(NULL));
     index = 0;
     while (fgets(buffer, MAX_LINE_LENGTH, file)) {
         trimNewline(buffer);
@@ -80,7 +82,7 @@ void loadPokedexFromCSV(Pokedex *pokedex, const char *filename) {
         /* Populate Pokedex List */
         pokedex->pokedexList[index].id = p.id;
         strcpy(pokedex->pokedexList[index].name, p.name);
-        pokedex->pokedexList[index].seen = 0; /* Default 0 */
+        pokedex->pokedexList[index].seen = rand() % 2; /* Default 0 */
 
         index++;
     }
