@@ -75,7 +75,12 @@ void print_options(PageState state)
     }
     else
     {
-        printf("No Options For YOU!!!\n");
+        printf("_____________________\n");
+        printf("| Try Again:        |\n");
+        printf("| 1. View Pokedex   |\n");
+        printf("| 2. Adventure      |\n");
+        printf("| 3. Save & Exit    |\n");
+        printf("|___________________|\n\n");
     }
 }
 
