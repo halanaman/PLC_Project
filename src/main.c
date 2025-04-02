@@ -33,11 +33,23 @@ void clear_screen()
 void update_state(Page *page, char input)
 {
     PageState prevState = page->currentState;
-	if (input == '0') {page->currentState = MENU;}
-    else if (input == '1') {page->currentState = POKEDEX;}
-    else if (input == '2') {page->currentState = ADVENTURE;}
-    else if (input == '3') {page->currentState = SAVE;}
-    else {printf("Invalid Choice, Try Again...\n");}
+	if (input == '1') 
+    {page->currentState = (prevState == MENU)? POKEDEX : prevState;}
+    else if (input == '2') 
+    {page->currentState = (prevState == MENU)? ADVENTURE : 
+                            (prevState == ADVENTURE)? MENU : prevState;}
+    else if (input == '3') 
+    {page->currentState = (prevState == MENU)? SAVE :
+                            (prevState == POKEDEX)? ADVENTURE : 
+                            (prevState == ADVENTURE)? SAVE : prevState;}
+    else if (input == '4') 
+    {page->currentState = (prevState == POKEDEX)? MENU : prevState;}
+    else if (input == '5') 
+    {page->currentState = (prevState == POKEDEX)? SAVE : prevState;}
+    else 
+    {printf("Invalid Choice, Try Again...\n");}
+    
+    if (page->currentState == prevState) {printf("Invalid Choice, Try Again...\n");}
 }
 
 void print_options(PageState state)
@@ -57,7 +69,9 @@ void print_options(PageState state)
         printf("| Pokedex Options:          |\n");
         printf("| 1. Previous Page          |\n");
         printf("| 2. Next Page              |\n");
-        printf("| 3. Back to Menu           |\n");
+        printf("| 3. Adventure              |\n");
+        printf("| 4. Back to Menu           |\n");
+        printf("| 5. Save & Exit            |\n");
         printf("| XXX. Access Pokemon #XXX  |\n");
         printf("|___________________________|\n\n");
     }
@@ -67,6 +81,7 @@ void print_options(PageState state)
         printf("| Adventure Options:    |\n");
         printf("| 1. Start Adventure    |\n");
         printf("| 2. Back to Menu       |\n");
+        printf("| 3. Save & Exit        |\n");
         printf("|_______________________|\n\n");
     }
 }
