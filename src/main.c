@@ -10,7 +10,6 @@ Pokedex pokedex;
 const char *savefile = "data/pokedex.dat";
 #define POKEMON_ROW 10
 #define POKEMON_PER_PAGE 20
-int cardViewIdx;
 
 typedef enum {
     MENU,
@@ -23,6 +22,7 @@ typedef enum {
 typedef struct {
     PageState currentState;
     int pokedexPage;
+    int cardViewIdx;
 } Page;
 
 void clear_screen()
@@ -162,33 +162,49 @@ void printPokemonAscii(const char *name, int width) {
 }
 
 
-void printCardView(Pokemon *pokemon) {
+void printCardView(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
     int width = 49;  
     char buffer[50];
     
-
-    printf("_________________________________________________\n");
-    printCenteredText(pokemon->name, width);
-
-    sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp);
-    printCenteredText(buffer, width);
-
-    printf("|-----------------------------------------------|\n");
-
-    printPokemonAscii(pokemon->name, width);
-
-    printf("|-----------------------------------------------|\n");
-
-    sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
-            pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc);
-    printCenteredText(buffer, width);
-
-    printf("|-----------------------------------------------|\n");
-
-    printWrappedText(pokemon->desc, width);
-    printf("|_______________________________________________|\n\n");
+    if (pokemonSeen->seen) {
+        printf("_________________________________________________\n");
+        printCenteredText(pokemon->name, width);
+        sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp);
+        printCenteredText(buffer, width);
+        printf("|-----------------------------------------------|\n");
+        printPokemonAscii(pokemon->name, width);
+        printf("|-----------------------------------------------|\n");
+        sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
+                pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc);
+        printCenteredText(buffer, width);
+        printf("|-----------------------------------------------|\n");
+        printWrappedText(pokemon->desc, width);
+        printf("|_______________________________________________|\n\n");
+    }
+    else {
+        printf("_________________________________________________\n");
+        printCenteredText("Pokemon Name", width);
+        printCenteredText("Type | HP: --", width);
+        printf("|-----------------------------------------------|\n");
+        printCenteredText("Pokemon ASCII Art", width);
+        printf("|-----------------------------------------------|\n");
+        printCenteredText("ATK: --- | DEF: --- | SPD: --- | ACC: ---%%", width);
+        printf("|-----------------------------------------------|\n");
+        printCenteredText("Description", width);
+        printf("|_______________________________________________|\n\n");
+    }
 }
 
+void printMenuPage()
+{
+    printf("________________________________________\n");
+    printf("|    Welcome to the Pokédex Game!      |\n");
+    printf("|--------------------------------------|\n");
+    printf("| Gotta catch 'em all! Start your      |\n");
+    printf("| journey to discover and learn about  |\n");
+    printf("| different Pokémon!                   |\n");
+    printf("|______________________________________|\n");
+}
 
 void update_page_state(Page *page, Pokedex *pokedex, char *input)
 {
@@ -227,24 +243,32 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
     }
     else if (status2 == 0 && page->currentState == POKEDEX)
     {
-        cardViewIdx = atoi(input) - 1;
-        page->currentState = CARDVIEW;
+        int i = atoi(input) - 1, start, end;
+        start = page->pokedexPage * POKEMON_PER_PAGE;
+        end = start + POKEMON_PER_PAGE - 1;
+        if (i >= start && i <= end) {
+            page->cardViewIdx = atoi(input) - 1;
+            page->currentState = CARDVIEW;
+        }
     }
 
     
     switch (page->currentState) {
         case MENU:
             printf("Menu:\n");
+            printMenuPage();
             break;
         case POKEDEX:
             printf("Pokedex:\n");
-            if ((strcmp(input,"1")==0) && page->pokedexPage > 0) {page->pokedexPage--;}
-            else if ((strcmp(input,"2")==0) && (page->pokedexPage + 1) * POKEMON_PER_PAGE < pokedex->size) {page->pokedexPage++;}
+            if (prevState == POKEDEX) {
+                if ((strcmp(input,"1")==0) && page->pokedexPage > 0) {page->pokedexPage--;}
+                else if ((strcmp(input,"2")==0) && (page->pokedexPage + 1) * POKEMON_PER_PAGE < pokedex->size) {page->pokedexPage++;}
+            }
             printPokedexPage(pokedex, page->pokedexPage);
             break;
         case CARDVIEW:
             printf("CardView:\n");
-            printCardView(&pokedex->pokemonList[cardViewIdx]);
+            printCardView(&pokedex->pokemonList[page->cardViewIdx], &pokedex->pokedexList[page->cardViewIdx]);
             break;
         case ADVENTURE:
             printf("Adventure:\n");
@@ -269,6 +293,7 @@ int main(int argc, char ** argv)
     Page page = {MENU, 0};
     loadPokedex(&pokedex, savefile);
     printf("Pokedex Loaded.\n");
+    update_page_state(&page, &pokedex, "0");
 
     while(1)
     {
