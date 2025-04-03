@@ -19,6 +19,7 @@ SRC = src/main.c \
       src/util/constants.c \
       src/util/db.c \
       src/util/pokedex.c \
+      src/util/adventure.c \
       src/util/newPokemonParser.c
 
 # Object files (convert .c to .o inside obj/)
