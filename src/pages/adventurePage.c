@@ -6,7 +6,6 @@
 #include <string.h>
 #include <time.h>
 
-
 void initialize_adv_page_data(InputState *inputState) {
     inputState->errorState = 0;
     inputState->appState = STATE_ADVENTURE;
@@ -121,7 +120,11 @@ void run_adv_page(AppStateStruct *appStateStruct) {
     Page *advPage;
     InputState inputState;
     AdvPageState advPageState;
-    DisplayStrings cutSceneText1, cutSceneText2;
+    DisplayStrings cutSceneText1 = {
+        "Let's go explore\n", 
+        "and hopefully encounter\n",
+        "some new Pokemon!\n"};
+    DisplayStrings cutSceneText2 = {"Exploring...\n"};
 
     initialize_adv_page_data(&inputState);
     /**
@@ -139,11 +142,6 @@ void run_adv_page(AppStateStruct *appStateStruct) {
                     update_app_state_struct(appStateStruct, STATE_SAVE, 0); /** Called this because function is leaving homePage */
                     break;
                 }
-                cutSceneText1 = {
-                    "Let's go explore\n", 
-                    "and hopefully encounter\n",
-                    "some new Pokemon!\n"};
-                cutSceneText2 = {"Exploring...\n"};
                 render_adv_cutscene(cutSceneText1, 3);
                 render_adv_cutscene(cutSceneText2, 1);
 

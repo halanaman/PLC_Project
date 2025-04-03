@@ -22,20 +22,19 @@ void type_text(const char* text, int delay_ms) {
 
 void render_adv_cutscene(DisplayStrings displayText, int numRows) {
     int i, rows;
+    const char* blockZeroText = "Adventure\n";
     clear_screen();
 
-    DisplayStrings blockZeroText = {"Adventure\n"};
-    printf("%s%s", LEFT_PADDING , blockZeroText);
-
+    printf("%s%s", LEFT_PADDING, blockZeroText);
     for (i = 0; i < 6; i++) {
         printf("\n");
     }
-
     /* Types out displayText */
     for (rows = 0; rows < numRows; rows++) {
-        type_text(displayText[rows], 200);
-        SLEEP(1000);
+        printf("%s", LEFT_PADDING);
+        type_text(displayText[rows], 100);
     }
+    SLEEP(1000);
 }
 
 
