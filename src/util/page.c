@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <regex.h>
+#include <time.h>
 
 #include "page.h"
 #include "pokedex.h"
@@ -35,22 +36,27 @@ void printLeftAlignedText(const char *text, int width) {
 }
 
 void printWrappedText(const char *text, int width) {
-    int start = 0, end, len = strlen(text) - 1;
-    width = width - 4;
-
+    int start, end, len;
+    char line[100], buffer[100];
+    start = 0;
+    strcpy(line, text);
+    len = strlen(line);
+    line[strcspn(line, "\r")] = 0;
+    
     while (start < len) {
         end = start + width;
         if (end > len) end = len;
 
         if (end < len) {
-            while (end > start && text[end] != ' ') end--;
+            while (end > start && line[end] != ' ') end--;
             if (end == start) end = start + width;
         }
-
-        printf("| %-*.*s |\n", width, end - start, text + start);
+        strncpy(buffer, line+start, end-start);
+        buffer[end - start] = 0;
+        printCenteredText(buffer, width);
 
         start = end;
-        while (text[start] == ' ' && start < len) start++;
+        while (line[start] == ' ' && start < len) start++;
     }
 }
 
@@ -66,13 +72,20 @@ PageOptions pageOptions[] = {
         2, 25},
     {ADVENTURE, 
         {"1. Start Adventure", "2. Back to Menu", "3. Save & Exit"},
-        3, 25}
+        3, 25},
+    {ADVENTURE_SUCCESS, 
+        {"1. Adventure Again", "2. View Pokemon", "3. Back to Menu"},
+        3, 25},
+    {ADVENTURE_FAIL, 
+        {"1. Adventure Again", "2. Back to Menu"},
+        2, 25}
 };
 
 void print_options(PageState state)
 {
-    int i, j;
-    for (i = 0; i < 4; i++){
+    int i, j, num_page_options;
+    num_page_options = sizeof(pageOptions)/sizeof(pageOptions[0]);
+    for (i = 0; i < num_page_options; i++){
         if (pageOptions[i].currentState == state){
             for (j = 0; j < pageOptions[i].width; j++)
             {
@@ -191,6 +204,32 @@ void printCardView(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
     }
 }
 
+void printAdventurePage(Page *page, Pokedex *pokedex) {
+    char buffer[100], pokemonName[20];
+    int width = 40;
+    strcpy(pokemonName, pokedex->pokedexList[page->cardViewIdx].name);
+    if (page->currentState == ADVENTURE) {
+        printf("________________________________________\n");
+        printWrappedText("Hello Trainer, are you ready to adventure?", width);
+        printCenteredText("", width);
+        printCenteredText("Let's go! ", width);
+        printf("|______________________________________|\n");
+    }
+    else if (page->currentState == ADVENTURE_SUCCESS) {
+        printf("________________________________________\n");
+        printPokemonAscii(pokemonName, width);
+        printf("|--------------------------------------|\n");
+        sprintf(buffer, "Wild %s appeared ", pokemonName);
+        printWrappedText(buffer, width);
+        printf("|______________________________________|\n");
+    }
+    else if (page->currentState == ADVENTURE_FAIL) {
+        printf("________________________________________\n");
+        printWrappedText("No luck today! You did not see any Pokemon. ", width);
+        printf("|______________________________________|\n");
+    }
+}
+
 void update_page_state(Page *page, Pokedex *pokedex, char *input)
 {
     PageState prevState;
@@ -206,21 +245,40 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
     status1 = regexec(&regex, input, 0, NULL, 0);
     status2 = regexec(&regex2, input, 0, NULL, 0);
     printf("%d, %d\n", status1, status2);
+    srand(time(NULL));
     
     if (status1 == 0)
     {
         prevState = page->currentState;
         if (strcmp(input,"1")==0)
         {page->currentState = (prevState == MENU)? POKEDEX : 
-                                (prevState == CARDVIEW)? POKEDEX : prevState;}
+                                (prevState == CARDVIEW)? POKEDEX : 
+                                (prevState == ADVENTURE_SUCCESS)? ADVENTURE :
+                                (prevState == ADVENTURE_FAIL)? ADVENTURE : prevState;
+            
+            if (prevState == ADVENTURE) {
+                if ( (rand() % 10) < 7) {
+                    int id = rand() % pokedex->size;
+                    page->cardViewIdx = id;
+                    pokedex->pokedexList[id].seen = 1;
+                    page->currentState = ADVENTURE_SUCCESS;
+                }
+                else {
+                    page->currentState = ADVENTURE_FAIL;
+                }
+            }
+        }
         else if (strcmp(input,"2")==0)
         {page->currentState = (prevState == MENU)? ADVENTURE : 
                                 (prevState == CARDVIEW)? POKEDEX :
-                                (prevState == ADVENTURE)? MENU : prevState;}
+                                (prevState == ADVENTURE)? MENU : 
+                                (prevState == ADVENTURE_SUCCESS)? CARDVIEW : 
+                                (prevState == ADVENTURE_FAIL)? MENU : prevState;}
         else if (strcmp(input,"3")==0)
         {page->currentState = (prevState == MENU)? SAVE :
                                 (prevState == POKEDEX)? ADVENTURE : 
-                                (prevState == ADVENTURE)? SAVE : prevState;}
+                                (prevState == ADVENTURE)? SAVE : 
+                                (prevState == ADVENTURE_SUCCESS)? MENU : prevState;}
         else if (strcmp(input,"4")==0)
         {page->currentState = (prevState == POKEDEX)? MENU : prevState;}
         else if (strcmp(input,"5")==0)
@@ -258,6 +316,15 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
             break;
         case ADVENTURE:
             printf("Adventure:\n");
+            printAdventurePage(page, pokedex);
+            break;
+        case ADVENTURE_SUCCESS:
+            printf("Adventure Success:\n");
+            printAdventurePage(page, pokedex);
+            break;
+        case ADVENTURE_FAIL:
+            printf("Adventure Fail:\n");
+            printAdventurePage(page, pokedex);
             break;
         case SAVE:
             printf("Saving...\n");

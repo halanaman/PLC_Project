@@ -16,8 +16,13 @@ int main(int argc, char ** argv)
     char input[65];
 
     Page page = {MENU, 0};
-    loadPokedex(&pokedex, loadfile);
-    printf("Pokedex Loaded.\n");
+    if (loadPokedex(&pokedex, loadfile)==0) {
+        printf("Pokedex Loaded.\n");
+    }
+    else {
+        printf("Unable to load Pokedex. Try again!!\n");
+        return 0;
+    }
     update_page_state(&page, &pokedex, "0");
 
     while(1)

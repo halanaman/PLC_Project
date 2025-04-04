@@ -12,11 +12,13 @@
  * Represents the different pages/screens in the Pokédex game.
  */
 typedef enum {
-    MENU,       /** Main Menu Page */
-    POKEDEX,    /** Pokedex List Page */
-    CARDVIEW,   /** Individual Pokemon Card View */
-    ADVENTURE,  /** Adventure Mode Page */
-    SAVE        /** Save Game Page */
+    MENU,               /** Main Menu Page */
+    POKEDEX,            /** Pokedex List Page */
+    CARDVIEW,           /** Individual Pokemon Card View */
+    ADVENTURE,          /** Adventure Mode Page */
+    ADVENTURE_SUCCESS,  /** Adventure Success Screen */
+    ADVENTURE_FAIL,     /** Adventure Fail Screen */
+    SAVE                /** Save Game Page */
 } PageState;
 
 /**
@@ -138,6 +140,17 @@ void printPokemonAscii(const char *name, int width);
  * - pokemonSeen: Pointer to an item that determines if the Pokémon has been seen.
  */
 void printCardView(Pokemon *pokemon, PokedexListItem *pokemonSeen);
+
+/**
+ * Function: printAdventurePage
+ * ----------------------------
+ * Displays the adventure page where the player embarks on a journey.
+ * 
+ * Parameters:
+ * - page: Pointer to the Page structure managing the game's current page.
+ * - pokedex: Pointer to the Pokedex structure for displaying Pokémon.
+ */
+void printAdventurePage(Page *page, Pokedex *pokedex);
 
 /**
  * Function: update_page_state
