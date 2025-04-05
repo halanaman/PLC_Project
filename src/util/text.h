@@ -62,5 +62,54 @@ void printPokemonAscii(const char *name, int width);
  */
 void printBorder(const char *text, int width);
 
+/**
+ * Function: printCenteredTextToFile
+ * --------------------------------
+ * Prints text aligned to the center of the given width and writes it to a file.
+ * 
+ * Parameters:
+ * - out: The file pointer where the text will be written.
+ * - text: The string to be printed.
+ * - width: The width to align the text within.
+ */
+void printCenteredTextToFile(FILE *out, const char *text, int width);
+
+/**
+ * Function: printWrappedTextToFile
+ * -------------------------------
+ * Prints wrapped text within the given width and writes it to a file.
+ * 
+ * Parameters:
+ * - out: The file pointer where the text will be written.
+ * - text: The string to be printed.
+ * - width: The width constraint for wrapping.
+ */
+void printWrappedTextToFile(FILE *out, const char *text, int width);
+
+/**
+ * Function: printPokemonAsciiToFile
+ * --------------------------------
+ * Prints ASCII art of a Pokémon and writes it to a file.
+ * 
+ * Parameters:
+ * - out: The file pointer where the ASCII art will be written.
+ * - name: The name of the Pokémon.
+ * - width: The display width for text alignment.
+ */
+void printPokemonAsciiToFile(FILE *out, const char *name, int width);
+
+/**
+ * Function: printBorderToFile
+ * --------------------------
+ * Prints a styled horizontal border to a file based on the given type and width.
+ * 
+ * Parameters:
+ * - out: The file pointer where the border will be written.
+ * - text: A string that specifies the border type.
+ *         Accepts "top", "middle", or "bottom".
+ * - width: The total width of the border to be printed.
+ */
+void printBorderToFile(FILE *out, const char *text, int width);
+
 #endif
 

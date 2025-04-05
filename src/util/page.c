@@ -48,28 +48,21 @@ void print_options(PageState state)
     num_page_options = sizeof(pageOptions)/sizeof(pageOptions[0]);
     for (i = 0; i < num_page_options; i++){
         if (pageOptions[i].currentState == state){
-            for (j = 0; j < pageOptions[i].width; j++)
-            {
-                printf("_");
-            }
-            printf("\n");
+            printBorder("top", pageOptions[i].width);
             printLeftAlignedText("", pageOptions[i].width);
             for (j = 0; j < pageOptions[i].num_options; j++)
             {
                 printLeftAlignedText(pageOptions[i].options[j], pageOptions[i].width);
             }
-            printf("|");
-            for (j = 0; j < pageOptions[i].width-2; j++)
-            {
-                printf("_");
-            }
-            printf("|\n\n");
+            printBorder("bottom", pageOptions[i].width);
+            break;
         }
     }
 }
 
 void printMenuPage()
 {   int width = 45;
+    printf("Menu:\n");
     printBorder("top", width);
     printCenteredText("Welcome to the Pokedex Game!", width);
     printBorder("middle", width);
@@ -82,6 +75,7 @@ void printPokedexPage(Pokedex *pokedex, int page) {
 
     startIdx = page * POKEMON_PER_PAGE;
     
+    printf("Pokedex:\n");
     printf("_______________________________________\n");
 
     for (i = 0; i < POKEMON_ROW; i++) {  
@@ -111,8 +105,9 @@ void printPokedexPage(Pokedex *pokedex, int page) {
 
 void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
     int width = 99;  
-    char buffer[50];
+    char buffer[100];
     
+    printf("CardView:\n");
     if (pokemonSeen->seen) {
         printBorder("top", width);
         printCenteredText(pokemon->name, width);
@@ -143,11 +138,31 @@ void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
     }
 }
 
+void saveCardViewPage(FILE *out, Pokemon *pokemon) {
+    int width = 99;  
+    char buffer[100];
+    
+    printBorderToFile(out, "top", width);
+    printCenteredTextToFile(out, pokemon->name, width);
+    sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp);
+    printCenteredTextToFile(out, buffer, width);
+    printBorderToFile(out, "middle", width);
+    printPokemonAsciiToFile(out, pokemon->name, width);
+    printBorderToFile(out, "middle", width);
+    sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
+            pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc);
+    printCenteredTextToFile(out, buffer, width);
+    printBorderToFile(out, "middle", width);
+    printWrappedTextToFile(out, pokemon->desc, width);
+    printBorderToFile(out, "bottom", width);
+}
+
 void printAdventurePage(Page *page, Pokedex *pokedex) {
     char buffer[100], pokemonName[20];
     int width = 40;
     strcpy(pokemonName, pokedex->pokedexList[page->cardViewIdx].name);
 
+    printf("Adventure:\n");
     printBorder("top", width);
     if (page->currentState == ADVENTURE) {
         printWrappedText("Hello Trainer, are you ready to adventure?", width);
@@ -191,7 +206,6 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
     {
         if (strcmp(input,"1")==0)
         {page->currentState = (prevState == MENU)? POKEDEX : 
-                                (prevState == CARDVIEW)? POKEDEX : 
                                 (prevState == ADVENTURE_SUCCESS)? ADVENTURE :
                                 (prevState == ADVENTURE_FAIL)? ADVENTURE : prevState;
             
@@ -239,11 +253,9 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
     clear_screen();
     switch (page->currentState) {
         case MENU:
-            printf("Menu:\n");
             printMenuPage();
             break;
         case POKEDEX:
-            printf("Pokedex:\n");
             if (prevState == POKEDEX) {
                 if ((strcmp(input,"1")==0) && page->pokedexPage > 0) {page->pokedexPage--;}
                 else if ((strcmp(input,"2")==0) && (page->pokedexPage + 1) * POKEMON_PER_PAGE < pokedex->size) {page->pokedexPage++;}
@@ -252,19 +264,32 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
             if (status2 == 0) {printf("Invalid Input, Please Choose from Pokemons displayed\n");}
             break;
         case CARDVIEW:
-            printf("CardView:\n");
             printCardViewPage(&pokedex->pokemonList[page->cardViewIdx], &pokedex->pokedexList[page->cardViewIdx]);
+            if ((strcmp(input,"1")==0) && pokedex->pokedexList[page->cardViewIdx].seen) {
+                char filename[100];
+                FILE *f;
+                sprintf(filename, "user/%s.txt", pokedex->pokedexList[page->cardViewIdx].name);
+                f = fopen(filename, "w");
+                if (f) {
+                    saveCardViewPage(f, &pokedex->pokemonList[page->cardViewIdx]);
+                    fclose(f);
+                    printf("Card saved to %s.\n", filename);
+                }
+                else {
+                    printf("Failed to save card.\n");
+                }
+            }
+            else if (pokedex->pokedexList[page->cardViewIdx].seen==0) {
+                printf("Nothing to save here!\n");
+            }
             break;
         case ADVENTURE:
-            printf("Adventure:\n");
             printAdventurePage(page, pokedex);
             break;
         case ADVENTURE_SUCCESS:
-            printf("Adventure Success:\n");
             printAdventurePage(page, pokedex);
             break;
         case ADVENTURE_FAIL:
-            printf("Adventure Fail:\n");
             printAdventurePage(page, pokedex);
             break;
         case SAVE:

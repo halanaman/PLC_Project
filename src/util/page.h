@@ -98,6 +98,20 @@ void printPokedexPage(Pokedex *pokedex, int page);
 void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen);
 
 /**
+ * Function: saveCardViewPage
+ * ---------------------------
+ * Saves the card view of a Pokémon to a file.
+ * This includes the Pokémon's name, type, stats, description,
+ * and ASCII art (if available). The output is formatted to look like a 
+ * Pokémon card.
+ *
+ * Parameters:
+ * - out: The file pointer where the card view will be saved.
+ * - pokemon: Pointer to the Pokémon to be saved.
+ */
+void saveCardViewPage(FILE *out, Pokemon *pokemon);
+
+/**
  * Function: printAdventurePage
  * ----------------------------
  * Displays the adventure page where the player embarks on a journey.
