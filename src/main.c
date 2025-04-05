@@ -25,8 +25,10 @@ int main(int argc, char ** argv)
         printf("Unable to load Pokedex. Try again!!\n");
         return 0;
     }
-    /* Load the Initial Page with invalid input */
-    update_page_state(&page, &pokedex, "0");
+    /* Load the Initial Page */
+    clear_screen();
+    printMenuPage();
+    pokedex.pokedexList->seen=1;
 
     /* Game starts, prints options available, wait for user input, handle page accordingly */
     while(1)

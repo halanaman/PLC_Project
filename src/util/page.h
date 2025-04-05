@@ -87,18 +87,7 @@ void printMenuPage();
 void printPokedexPage(Pokedex *pokedex, int page);
 
 /**
- * Function: printPokemonAscii
- * ---------------------------
- * Prints ASCII art of a Pokémon.
- * 
- * Parameters:
- * - name: The name of the Pokémon.
- * - width: The display width for text alignment.
- */
-void printPokemonAscii(const char *name, int width);
-
-/**
- * Function: printCardView
+ * Function: printCardViewPage
  * -----------------------
  * Displays a detailed card view of a Pokémon with its status and ASCII art.
  * 
@@ -106,7 +95,7 @@ void printPokemonAscii(const char *name, int width);
  * - pokemon: Pointer to the Pokémon to be displayed.
  * - pokemonSeen: Pointer to an item that determines if the Pokémon has been seen.
  */
-void printCardView(Pokemon *pokemon, PokedexListItem *pokemonSeen);
+void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen);
 
 /**
  * Function: printAdventurePage

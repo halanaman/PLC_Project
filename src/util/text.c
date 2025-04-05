@@ -44,4 +44,49 @@ void printWrappedText(const char *text, int width) {
     }
 }
 
+void printPokemonAscii(const char *name, int width) {
+    FILE *file;
+    char filename[100];
+    char line[100];
+    sprintf(filename, "data/ascii/%s.txt", name);
+
+    file = fopen(filename, "r");
+    if (!file) {
+        printCenteredText("ASCII art not found", width);
+        return;
+    }
+
+    while (fgets(line, sizeof(line)-1, file)) {
+        line[strcspn(line, "\n")] = 0;
+        line[strcspn(line, "\r")] = 0;
+        printCenteredText(line, width);
+    }
+
+    fclose(file);
+}
+
+void printBorder(const char *text, int width) {
+    char buffer[100];
+    if (strcmp(text, "top")==0) {
+        memset(buffer, '_', width);
+        buffer[width] = 0;
+        printf("%s\n", buffer);
+    }
+    else if (strcmp(text, "middle")==0) {
+        memset(buffer, '-', width-2);
+        buffer[width-2] = 0;
+        printf("|%s|\n", buffer);
+    }
+    else if (strcmp(text, "space")==0) {
+        memset(buffer, ' ', width-2);
+        buffer[width-2] = 0;
+        printf("|%s|\n", buffer);
+    }
+    else if (strcmp(text, "bottom")==0) {
+        memset(buffer, '_', width-2);
+        buffer[width-2] = 0;
+        printf("|%s|\n\n", buffer);
+    }
+}
+
 

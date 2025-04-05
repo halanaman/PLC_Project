@@ -34,5 +34,33 @@ void printLeftAlignedText(const char *text, int width);
  */
 void printWrappedText(const char *text, int width);
 
+/**
+ * Function: printPokemonAscii
+ * ---------------------------
+ * Prints ASCII art of a Pokémon.
+ * 
+ * Parameters:
+ * - name: The name of the Pokémon.
+ * - width: The display width for text alignment.
+ */
+void printPokemonAscii(const char *name, int width);
+
+/**
+ * Function: printBorder
+ * ---------------------
+ * Prints a styled horizontal border based on the given type and width.
+ * 
+ * Parameters:
+ * - text: A string that specifies the border type.
+ *         Accepts "top", "middle", or "bottom".
+ * - width: The total width of the border to be printed.
+ * 
+ * Notes:
+ * - "top" prints a solid underscore line.
+ * - "middle" prints a dashed line enclosed in pipes (|----|).
+ * - "bottom" prints a solid underscore line enclosed in pipes (|____|).
+ */
+void printBorder(const char *text, int width);
+
 #endif
 
