@@ -12,7 +12,8 @@ OBJ_DIR = obj
 SRC = src/main.c \
       src/util/db.c \
       src/util/pokedex.c \
-      src/util/page.c
+      src/util/page.c \
+      src/util/text.c
 
 # Object files (convert .c to .o inside obj/)
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))

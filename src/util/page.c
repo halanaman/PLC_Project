@@ -7,6 +7,7 @@
 #include "page.h"
 #include "pokedex.h"
 #include "db.h"
+#include "text.h"
 
 const char *savefile = "data/pokedex.dat";
 
@@ -18,46 +19,6 @@ void clear_screen()
     #define CLEAR "clear"
     #endif
     system(CLEAR);
-}
-
-void printCenteredText(const char *text, int width) {
-    int len = strlen(text);
-    int padding = (width - 2 - len) / 2;
-    int extra = (width - 2 - len) % 2;  
-
-    printf("|%*s%s%*s|\n", padding, "", text, padding + extra, "");
-}
-
-void printLeftAlignedText(const char *text, int width) {
-    int len = strlen(text);
-    int padding = width - 4 - len;
-
-    printf("| %s%*s |\n", text, padding, "");
-}
-
-void printWrappedText(const char *text, int width) {
-    int start, end, len;
-    char line[100], buffer[100];
-    start = 0;
-    strcpy(line, text);
-    len = strlen(line);
-    line[strcspn(line, "\r")] = 0;
-    
-    while (start < len) {
-        end = start + width;
-        if (end > len) end = len;
-
-        if (end < len) {
-            while (end > start && line[end] != ' ') end--;
-            if (end == start) end = start + width;
-        }
-        strncpy(buffer, line+start, end-start);
-        buffer[end - start] = 0;
-        printCenteredText(buffer, width);
-
-        start = end;
-        while (line[start] == ' ' && start < len) start++;
-    }
 }
 
 PageOptions pageOptions[] = {
@@ -164,8 +125,8 @@ void printPokemonAscii(const char *name, int width) {
 
     while (fgets(line, sizeof(line)-1, file)) {
         line[strcspn(line, "\n")] = 0;
-        printf("     %s     \n", line);
-        /* printCenteredText(line, width); */
+        line[strcspn(line, "\r")] = 0;
+        printCenteredText(line, width);
     }
 
     fclose(file);
