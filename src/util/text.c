@@ -4,11 +4,16 @@
 #include "text.h"
 
 void printCenteredText(const char *text, int width) {
-    int len = strlen(text);
-    int padding = (width - 2 - len) / 2;
-    int extra = (width - 2 - len) % 2;  
+    int len, padding, extra;
+    char buffer[100];
+    len = strlen(text);
+    if (len > width-2) {len = width-2;}
+    padding = (width - 2 - len) / 2;
+    extra = (width - 2 - len) % 2;
+    strncpy(buffer, text, len);
+    buffer[len] = 0;
 
-    printf("|%*s%s%*s|\n", padding, "", text, padding + extra, "");
+    printf("|%*s%s%*s|\n", padding, "", buffer, padding + extra, "");
 }
 
 void printLeftAlignedText(const char *text, int width) {

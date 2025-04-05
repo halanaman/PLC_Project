@@ -110,7 +110,7 @@ void printPokedexPage(Pokedex *pokedex, int page) {
 }
 
 void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
-    int width = 49;  
+    int width = 99;  
     char buffer[50];
     
     if (pokemonSeen->seen) {

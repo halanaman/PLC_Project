@@ -39,6 +39,10 @@ void loadPokedexFromCSV(Pokedex *pokedex, const char *filename) {
     int index;
     char *token;
     Pokemon p;
+    /* Used to create new Pokemon.txt files
+        FILE *file2;
+        char filename2[100];
+    */
     
     /* Count lines to allocate memory */
     numPokemon = countLinesInFile(filename);
@@ -76,13 +80,32 @@ void loadPokedexFromCSV(Pokedex *pokedex, const char *filename) {
         p.acc = atof(strtok(NULL, ","));
         strcpy(p.desc, strtok(NULL, ","));
 
+        /* Created Pokemon.txt files for ascii art, Can use in the future when adding Pokemon
+            memset(filename2, 0, strlen(filename2));
+            sprintf(filename2, "../../data/ascii/%s.txt", p.name);
+            file2 = fopen(filename2, "r");
+            if (file2 == NULL) {
+                file2 = fopen(filename2, "w");
+                if (file2 == NULL) {
+                    perror("Error creating file");
+                    exit(1);
+                } else {
+                    fputs("ASCII art not found", file2);
+                    printf("File created successfully.\n");
+                }
+            } else {
+                printf("File already exists.\n");
+                fclose(file2);
+            }
+        */
+
         /* Store in Pokedex */
         pokedex->pokemonList[index] = p;
 
         /* Populate Pokedex List */
         pokedex->pokedexList[index].id = p.id;
         strcpy(pokedex->pokedexList[index].name, p.name);
-        pokedex->pokedexList[index].seen = 0;/* rand() % 2;  Default 0 */
+        pokedex->pokedexList[index].seen = 1;/* rand() % 2;  Default 0 */
 
         index++;
     }
