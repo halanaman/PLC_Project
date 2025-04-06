@@ -170,6 +170,9 @@ void printAdventurePage(Page *page, Pokedex *pokedex) {
         printCenteredText("Let's go!", width);
     }
     else if (page->currentState == ADVENTURE_SUCCESS) {
+        printLeftAlignedText("The bushes are shaking.....", width);
+        printBorder("bottom", width);
+        printBorder("top", width);
         printPokemonAscii(pokemonName, width);
         printBorder("middle", width);
         sprintf(buffer, "Wild %s appeared ", pokemonName);
@@ -268,7 +271,7 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
             if ((strcmp(input,"1")==0) && pokedex->pokedexList[page->cardViewIdx].seen) {
                 char filename[100];
                 FILE *f;
-                sprintf(filename, "user/%s.txt", pokedex->pokedexList[page->cardViewIdx].name);
+                sprintf(filename, "user/output/%s.txt", pokedex->pokedexList[page->cardViewIdx].name);
                 f = fopen(filename, "w");
                 if (f) {
                     saveCardViewPage(f, &pokedex->pokemonList[page->cardViewIdx]);
