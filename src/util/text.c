@@ -24,21 +24,21 @@ void printLeftAlignedText(const char *text, int width) {
 }
 
 void printWrappedText(const char *text, int width) {
-    int start, end, len, lineWidth;
+    int start, end, len, line_width;
     char line[100], buffer[100];
     start = 0;
     strcpy(line, text);
     len = strlen(line);
     line[strcspn(line, "\r")] = 0;
-    lineWidth = width - 4;
+    line_width = width - 4;
     
     while (start < len) {
-        end = start + lineWidth;
+        end = start + line_width;
         if (end > len) end = len;
 
         if (end < len) {
             while (end > start && line[end] != ' ') end--;
-            if (end == start) end = start + lineWidth;
+            if (end == start) end = start + line_width;
         }
         strncpy(buffer, line+start, end-start);
         buffer[end - start] = 0;
@@ -108,21 +108,21 @@ void printCenteredTextToFile(FILE *out, const char *text, int width) {
 }
 
 void printWrappedTextToFile(FILE *out, const char *text, int width) {
-    int start, end, len, lineWidth;
+    int start, end, len, line_width;
     char line[100], buffer[100];
     start = 0;
     strcpy(line, text);
     len = strlen(line);
     line[strcspn(line, "\r")] = 0;
-    lineWidth = width - 4;
+    line_width = width - 4;
     
     while (start < len) {
-        end = start + lineWidth;
+        end = start + line_width;
         if (end > len) end = len;
 
         if (end < len) {
             while (end > start && line[end] != ' ') end--;
-            if (end == start) end = start + lineWidth;
+            if (end == start) end = start + line_width;
         }
         strncpy(buffer, line+start, end-start);
         buffer[end - start] = 0;

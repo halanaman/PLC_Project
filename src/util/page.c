@@ -13,13 +13,14 @@ const char *savefile = "data/pokedex.dat";
 
 void clearScreen() {
     #ifdef _WIN32
-    #define CLEAR "cls"
+        #define CLEAR "cls"
     #else /* In any other OS */
-    #define CLEAR "clear"
+        #define CLEAR "clear"
     #endif
     system(CLEAR);
 }
 
+/* List of available Page Options */
 PageOptions pageOptions[] = {
     {MENU, 
         {"1. View Pokedex", "2. Adventure", "3. Save & Exit"},
@@ -45,6 +46,7 @@ void printOptions(PageState state) {
     int i, j, numPageOptions;
     numPageOptions = sizeof(pageOptions)/sizeof(pageOptions[0]);
 
+    /* Iterate through options available and find the option for current state */
     for (i = 0; i < numPageOptions; i++){
         if (pageOptions[i].currentState == state){
             printBorder("top", pageOptions[i].width);
@@ -80,6 +82,7 @@ void printPokedexPage(Pokedex *pokedex, int page) {
         leftIdx = startIdx + i;
         rightIdx = startIdx + i + POKEMON_ROW;
 
+        /* Prints the Pokemons for the left side */
         if (leftIdx < pokedex->size) {
             printf("| %03d %-12s ", 
                 pokedex->pokedexList[leftIdx].id, 
@@ -88,6 +91,7 @@ void printPokedexPage(Pokedex *pokedex, int page) {
             printf("|                  "); 
         }
 
+        /* Prints the Pokemons for the right side */
         if (rightIdx < pokedex->size) {
             printf("| %03d %-12s |\n", 
                 pokedex->pokedexList[rightIdx].id, 
@@ -105,24 +109,25 @@ void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
     char buffer[100];
     
     printf("CardView:\n");
-
     printBorder("top", CARD_WIDTH);
 
-    pokemonSeen->seen? sprintf(buffer, "%s", pokemon->name) : 
+    /* Prints Name, Type, and HP status */
+    pokemonSeen->seen? sprintf(buffer, "%03d %s", pokemon->id, pokemon->name) : 
                         sprintf(buffer, "%03d Pokemon Name", pokemon->id);
     printCenteredText(buffer, CARD_WIDTH);
-
     pokemonSeen->seen? sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp) : 
                         sprintf(buffer, "Type | HP: --");
     printCenteredText(buffer, CARD_WIDTH);
 
     printBorder("middle", CARD_WIDTH);
 
+    /* Prints Ascii art of the Pokemon if seen */
     pokemonSeen->seen? printPokemonAscii(pokemon->name, CARD_WIDTH) : 
                         printCenteredText("Pokemon Not Found", CARD_WIDTH);
 
     printBorder("middle", CARD_WIDTH);
 
+    /* Prints the Pokemon's other status */
     pokemonSeen->seen? sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
                                 pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc) : 
                         sprintf(buffer, "ATK: --- | DEF: --- | SPD: --- | ACC: ---%%");
@@ -130,6 +135,7 @@ void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
 
     printBorder("middle", CARD_WIDTH);
 
+    /* Prints the description of the Pokemon */
     pokemonSeen->seen? printWrappedText(pokemon->desc, CARD_WIDTH) : 
                         printCenteredText("Description", CARD_WIDTH);
 
@@ -141,28 +147,32 @@ void saveCardViewPage(FILE *out, Pokemon *pokemon) {
     
     printBorderToFile(out, "top", CARD_WIDTH);
 
+    /* Prints Name, Type, and HP status to File*/
     printCenteredTextToFile(out, pokemon->name, CARD_WIDTH);
-
     sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp);
     printCenteredTextToFile(out, buffer, CARD_WIDTH);
 
     printBorderToFile(out, "middle", CARD_WIDTH);
 
+    /* Prints Ascii art of the Pokemon if available to file */
     printPokemonAsciiToFile(out, pokemon->name, CARD_WIDTH);
 
     printBorderToFile(out, "middle", CARD_WIDTH);
 
+    /* Prints the Pokemon's other status to File */
     sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
             pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc);
     printCenteredTextToFile(out, buffer, CARD_WIDTH);
 
     printBorderToFile(out, "middle", CARD_WIDTH);
 
+    /* Prints the description of the Pokemon to File*/
     printWrappedTextToFile(out, pokemon->desc, CARD_WIDTH);
 
     printBorderToFile(out, "bottom", CARD_WIDTH);
 }
 
+/* List of available Success Adventure Message */
 const char *successMsg[] = {
     "You hear rustling nearby... something's definitely out there.",
     "Footprints! Something's been here recently.",
@@ -176,6 +186,7 @@ const char *successMsg[] = {
     "You kneel and spot fresh claw marks in the soil."
 };
 
+/* List of available Fail Adventure Message */
 const char *failMsg[] = {
     "You search the tall grass... and trip over a banana peel. No Pokemon today.",
     "All you found was a PokeDoll with a creepy smile. It stares back.",
@@ -206,11 +217,13 @@ void printAdventurePage(Page *page, Pokedex *pokedex) {
     printf("Adventure:\n");
     printBorder("top", PAGE_WIDTH);
     if (page->currentState == ADVENTURE) {
+        /* Welcome Adventure Page */
         printWrappedText("Hello Trainer, are you ready to adventure?", PAGE_WIDTH);
         printBorder("space", PAGE_WIDTH);
         printCenteredText("Let's go!", PAGE_WIDTH);
     }
     else if (page->currentState == ADVENTURE_SUCCESS) {
+        /* Prints Success Message, then the Pokemon found */
         printWrappedText(successMsg[rand()%numSuccessMsg], PAGE_WIDTH);
         printBorder("bottom", PAGE_WIDTH);
         printBorder("top", PAGE_WIDTH);
@@ -220,6 +233,7 @@ void printAdventurePage(Page *page, Pokedex *pokedex) {
         printWrappedText(buffer, PAGE_WIDTH);
     }
     else if (page->currentState == ADVENTURE_FAIL) {
+        /* Prints Fail Message */
         printWrappedText(failMsg[rand()%numFailMsg], PAGE_WIDTH);
     }
     printBorder("bottom", PAGE_WIDTH);
@@ -228,11 +242,11 @@ void printAdventurePage(Page *page, Pokedex *pokedex) {
 void updatePageState(Page *page, Pokedex *pokedex, char *input)
 {
     PageState prevState;
-    /* Uses regex to capture sigle digit and 3-digit inputs */
     char pattern1[8], pattern2[11];
     regex_t regex, regex2;
     int status1, status2;
 
+    /* Uses regex to capture sigle digit and 3-digit inputs */
     strcpy(pattern1, "^[0-9]$");
     strcpy(pattern2, "^[0-9]{3}$");
     
@@ -304,6 +318,7 @@ void updatePageState(Page *page, Pokedex *pokedex, char *input)
             printMenuPage();
             break;
         case POKEDEX:
+            /* Handles flipping of Pokedex Page */
             if (prevState == POKEDEX) {
                 if ((strcmp(input,"1")==0) && page->pokedexPage > 0) {page->pokedexPage--;}
                 else if ((strcmp(input,"2")==0) && (page->pokedexPage + 1) * POKEMON_PER_PAGE < pokedex->size) {page->pokedexPage++;}
@@ -313,6 +328,7 @@ void updatePageState(Page *page, Pokedex *pokedex, char *input)
             break;
         case CARDVIEW:
             printCardViewPage(&pokedex->pokemonList[page->cardViewIdx], &pokedex->pokedexList[page->cardViewIdx]);
+            /* When user choose to save the card */
             if ((strcmp(input,"1")==0) && pokedex->pokedexList[page->cardViewIdx].seen) {
                 char filename[100];
                 FILE *f;
