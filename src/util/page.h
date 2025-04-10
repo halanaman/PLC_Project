@@ -5,6 +5,8 @@
 
 #define POKEMON_ROW 10      /** Number of Pokemon rows per page */
 #define POKEMON_PER_PAGE 20 /** Number of Pokemon displayed per page */
+#define PAGE_WIDTH 50
+#define CARD_WIDTH 100
 
 /**
  * Enum: PageState
@@ -41,32 +43,32 @@ typedef struct {
  * Stores available options for a given page.
  * - currentState: The page this set of options belongs to.
  * - options: List of menu options as strings.
- * - num_options: Number of available options.
+ * - numOptions: Number of available options.
  * - width: Display width for text alignment.
  */
 typedef struct {
     PageState currentState; /** Current Page State */
     const char *options[6]; /** List of options (up to 6) */
-    int num_options;        /** Number of Available Options */
+    int numOptions;        /** Number of Available Options */
     int width;              /** Display width for text alignment */
 } PageOptions;
 
 /**
- * Function: clear_screen
+ * Function: clearScreen
  * ----------------------
  * Clears the console screen based on the operating system.
  */
-void clear_screen();
+void clearScreen();
 
 /**
- * Function: print_options
+ * Function: printOptions
  * -----------------------
  * Prints the available menu options for the given page.
  * 
  * Parameters:
  * - state: The current page state to determine available options.
  */
-void print_options(PageState state);
+void printOptions(PageState state);
 
 /**
  * Function: printMenuPage
@@ -123,7 +125,7 @@ void saveCardViewPage(FILE *out, Pokemon *pokemon);
 void printAdventurePage(Page *page, Pokedex *pokedex);
 
 /**
- * Function: update_page_state
+ * Function: updatePageState
  * ---------------------------
  * Handles user input to change the PageState and update the display accordingly.
  * 
@@ -132,7 +134,7 @@ void printAdventurePage(Page *page, Pokedex *pokedex);
  * - pokedex: Pointer to the Pokedex structure for displaying Pokémon.
  * - input: User input string that determines the next action.
  */
-void update_page_state(Page *page, Pokedex *pokedex, char *input);
+void updatePageState(Page *page, Pokedex *pokedex, char *input);
 
 #endif
 

@@ -26,18 +26,18 @@ int main(int argc, char ** argv)
         return 0;
     }
     /* Load the Initial Page */
-    clear_screen();
+    clearScreen();
     printMenuPage();
     pokedex.pokedexList->seen=1;
 
     /* Game starts, prints options available, wait for user input, handle page accordingly */
     while(1)
     {
-        print_options(page.currentState);
+        printOptions(page.currentState);
         printf("Enter Choice: ");
         scanf(" %64s", input);
         printf("You picked %s\n\n", input);
-        update_page_state(&page, &pokedex, input);
+        updatePageState(&page, &pokedex, input);
     }
     return 0;
 }

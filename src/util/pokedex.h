@@ -14,7 +14,7 @@
 typedef struct {
     int id;                             /** Pokemon ID */
     char name[MAX_POKEMON_NAME_LENGTH]; /** Pokemon Name */
-    int seen;                           /** 1 if seen, 0 if now seen */
+    int seen;                           /** 1 if seen, 0 if not seen */
 } PokedexListItem;
 
 /**

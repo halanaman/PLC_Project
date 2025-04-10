@@ -105,7 +105,7 @@ void loadPokedexFromCSV(Pokedex *pokedex, const char *filename) {
         /* Populate Pokedex List */
         pokedex->pokedexList[index].id = p.id;
         strcpy(pokedex->pokedexList[index].name, p.name);
-        pokedex->pokedexList[index].seen = 1;/* rand() % 2;  Default 0 */
+        pokedex->pokedexList[index].seen = 0;/* rand() % 2;  Default 0 */
 
         index++;
     }

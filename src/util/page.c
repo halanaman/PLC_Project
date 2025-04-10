@@ -11,8 +11,7 @@
 
 const char *savefile = "data/pokedex.dat";
 
-void clear_screen()
-{
+void clearScreen() {
     #ifdef _WIN32
     #define CLEAR "cls"
     #else /* In any other OS */
@@ -42,15 +41,15 @@ PageOptions pageOptions[] = {
         2, 25}
 };
 
-void print_options(PageState state)
-{
-    int i, j, num_page_options;
-    num_page_options = sizeof(pageOptions)/sizeof(pageOptions[0]);
-    for (i = 0; i < num_page_options; i++){
+void printOptions(PageState state) {
+    int i, j, numPageOptions;
+    numPageOptions = sizeof(pageOptions)/sizeof(pageOptions[0]);
+
+    for (i = 0; i < numPageOptions; i++){
         if (pageOptions[i].currentState == state){
             printBorder("top", pageOptions[i].width);
-            printLeftAlignedText("", pageOptions[i].width);
-            for (j = 0; j < pageOptions[i].num_options; j++)
+            printBorder("space", pageOptions[i].width);
+            for (j = 0; j < pageOptions[i].numOptions; j++)
             {
                 printLeftAlignedText(pageOptions[i].options[j], pageOptions[i].width);
             }
@@ -60,14 +59,13 @@ void print_options(PageState state)
     }
 }
 
-void printMenuPage()
-{   int width = 45;
+void printMenuPage() {   
     printf("Menu:\n");
-    printBorder("top", width);
-    printCenteredText("Welcome to the Pokedex Game!", width);
-    printBorder("middle", width);
-    printWrappedText("Gotta catch 'em all! Start your journey to discover and learn about different Pokemon!", width);
-    printBorder("bottom", width);
+    printBorder("top", PAGE_WIDTH);
+    printCenteredText("Welcome to the Pokedex Game!", PAGE_WIDTH);
+    printBorder("middle", PAGE_WIDTH);
+    printWrappedText("Gotta catch 'em all! Start your journey to discover and learn about different Pokemon!", PAGE_WIDTH);
+    printBorder("bottom", PAGE_WIDTH);
 }
 
 void printPokedexPage(Pokedex *pokedex, int page) {
@@ -104,102 +102,149 @@ void printPokedexPage(Pokedex *pokedex, int page) {
 }
 
 void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
-    int width = 99;  
     char buffer[100];
     
     printf("CardView:\n");
-    if (pokemonSeen->seen) {
-        printBorder("top", width);
-        printCenteredText(pokemon->name, width);
-        sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp);
-        printCenteredText(buffer, width);
-        printBorder("middle", width);
-        printPokemonAscii(pokemon->name, width);
-        printBorder("middle", width);
-        sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
-                pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc);
-        printCenteredText(buffer, width);
-        printBorder("middle", width);
-        printWrappedText(pokemon->desc, width);
-        printBorder("bottom", width);
-    }
-    else {
-        printBorder("top", width);
-        sprintf(buffer, "%03d Pokemon Name", pokemon->id);
-        printCenteredText(buffer, width);
-        printCenteredText("Type | HP: --", width);
-        printBorder("middle", width);
-        printCenteredText("Pokemon Not Found", width);
-        printBorder("middle", width);
-        printCenteredText("ATK: --- | DEF: --- | SPD: --- | ACC: ---%%", width);
-        printBorder("middle", width);
-        printCenteredText("Description", width);
-        printBorder("bottom", width);
-    }
+
+    printBorder("top", CARD_WIDTH);
+
+    pokemonSeen->seen? sprintf(buffer, "%s", pokemon->name) : 
+                        sprintf(buffer, "%03d Pokemon Name", pokemon->id);
+    printCenteredText(buffer, CARD_WIDTH);
+
+    pokemonSeen->seen? sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp) : 
+                        sprintf(buffer, "Type | HP: --");
+    printCenteredText(buffer, CARD_WIDTH);
+
+    printBorder("middle", CARD_WIDTH);
+
+    pokemonSeen->seen? printPokemonAscii(pokemon->name, CARD_WIDTH) : 
+                        printCenteredText("Pokemon Not Found", CARD_WIDTH);
+
+    printBorder("middle", CARD_WIDTH);
+
+    pokemonSeen->seen? sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
+                                pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc) : 
+                        sprintf(buffer, "ATK: --- | DEF: --- | SPD: --- | ACC: ---%%");
+    printCenteredText(buffer, CARD_WIDTH);
+
+    printBorder("middle", CARD_WIDTH);
+
+    pokemonSeen->seen? printWrappedText(pokemon->desc, CARD_WIDTH) : 
+                        printCenteredText("Description", CARD_WIDTH);
+
+    printBorder("bottom", CARD_WIDTH);
 }
 
 void saveCardViewPage(FILE *out, Pokemon *pokemon) {
-    int width = 99;  
     char buffer[100];
     
-    printBorderToFile(out, "top", width);
-    printCenteredTextToFile(out, pokemon->name, width);
+    printBorderToFile(out, "top", CARD_WIDTH);
+
+    printCenteredTextToFile(out, pokemon->name, CARD_WIDTH);
+
     sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp);
-    printCenteredTextToFile(out, buffer, width);
-    printBorderToFile(out, "middle", width);
-    printPokemonAsciiToFile(out, pokemon->name, width);
-    printBorderToFile(out, "middle", width);
+    printCenteredTextToFile(out, buffer, CARD_WIDTH);
+
+    printBorderToFile(out, "middle", CARD_WIDTH);
+
+    printPokemonAsciiToFile(out, pokemon->name, CARD_WIDTH);
+
+    printBorderToFile(out, "middle", CARD_WIDTH);
+
     sprintf(buffer, "ATK: %-3d | DEF: %-3d | SPD: %-3d | ACC: %-3d%%", 
             pokemon->atk, pokemon->def, pokemon->spd, pokemon->acc);
-    printCenteredTextToFile(out, buffer, width);
-    printBorderToFile(out, "middle", width);
-    printWrappedTextToFile(out, pokemon->desc, width);
-    printBorderToFile(out, "bottom", width);
+    printCenteredTextToFile(out, buffer, CARD_WIDTH);
+
+    printBorderToFile(out, "middle", CARD_WIDTH);
+
+    printWrappedTextToFile(out, pokemon->desc, CARD_WIDTH);
+
+    printBorderToFile(out, "bottom", CARD_WIDTH);
 }
+
+const char *successMsg[] = {
+    "You hear rustling nearby... something's definitely out there.",
+    "Footprints! Something's been here recently.",
+    "Your PokeRadar starts beeping wildly!",
+    "The grass starts shaking... get ready!",
+    "You feel the air shift. Something approaches.",
+    "You hear a distant cry. A Pokemon is near!",
+    "The wind carries a strange scent... could it be?",
+    "You spot movement in the corner of your eye.",
+    "Something glints in the distance—eyes watching?",
+    "You kneel and spot fresh claw marks in the soil."
+};
+
+const char *failMsg[] = {
+    "You search the tall grass... and trip over a banana peel. No Pokemon today.",
+    "All you found was a PokeDoll with a creepy smile. It stares back.",
+    "You hear rustling... but it's just the wind and your hopes leaving.",
+    "You stepped into a puddle. That's it. Just a puddle.",
+    "You uncovered a rare item! Oh wait... it's a rock. Just a regular rock.",
+    "You spot a shadow in the distance... but it turns out to be your own.",
+    "The path is quiet. Too quiet. Not a single Pokemon in sight.",
+    "You feel like something is watching you. But it never shows itself.",
+    "A strange fog rolls in. When it clears... there's nothing but silence.",
+    "You reach into the bushes and pull out... a moldy sandwich.",
+    "No Pokemon appeared... but you found some mysterious footprints.",
+    "You didn't find one today, but something tells you you're close.",
+    "Your PokeRadar beeps once... then goes silent. Next time?"
+};
 
 void printAdventurePage(Page *page, Pokedex *pokedex) {
     char buffer[100], pokemonName[20];
-    int width = 40;
+    int numSuccessMsg, numFailMsg;
+    numSuccessMsg = sizeof(successMsg) / sizeof(successMsg[0]);
+    numFailMsg = sizeof(failMsg) / sizeof(failMsg[0]);
+
+    /* random seed, used for adveture page */
+    srand(time(NULL));
+
     strcpy(pokemonName, pokedex->pokedexList[page->cardViewIdx].name);
 
     printf("Adventure:\n");
-    printBorder("top", width);
+    printBorder("top", PAGE_WIDTH);
     if (page->currentState == ADVENTURE) {
-        printWrappedText("Hello Trainer, are you ready to adventure?", width);
-        printBorder("space", width);
-        printCenteredText("Let's go!", width);
+        printWrappedText("Hello Trainer, are you ready to adventure?", PAGE_WIDTH);
+        printBorder("space", PAGE_WIDTH);
+        printCenteredText("Let's go!", PAGE_WIDTH);
     }
     else if (page->currentState == ADVENTURE_SUCCESS) {
-        printLeftAlignedText("The bushes are shaking.....", width);
-        printBorder("bottom", width);
-        printBorder("top", width);
-        printPokemonAscii(pokemonName, width);
-        printBorder("middle", width);
-        sprintf(buffer, "Wild %s appeared ", pokemonName);
-        printWrappedText(buffer, width);
+        printWrappedText(successMsg[rand()%numSuccessMsg], PAGE_WIDTH);
+        printBorder("bottom", PAGE_WIDTH);
+        printBorder("top", PAGE_WIDTH);
+        printPokemonAscii(pokemonName, PAGE_WIDTH);
+        printBorder("middle", PAGE_WIDTH);
+        sprintf(buffer, "A Wild %s appeared ", pokemonName);
+        printWrappedText(buffer, PAGE_WIDTH);
     }
     else if (page->currentState == ADVENTURE_FAIL) {
-        printWrappedText("No luck today! You did not see any Pokemon.", width);
+        printWrappedText(failMsg[rand()%numFailMsg], PAGE_WIDTH);
     }
-    printBorder("bottom", width);
+    printBorder("bottom", PAGE_WIDTH);
 }
 
-void update_page_state(Page *page, Pokedex *pokedex, char *input)
+void updatePageState(Page *page, Pokedex *pokedex, char *input)
 {
     PageState prevState;
     /* Uses regex to capture sigle digit and 3-digit inputs */
     char pattern1[8], pattern2[11];
     regex_t regex, regex2;
     int status1, status2;
+
     strcpy(pattern1, "^[0-9]$");
     strcpy(pattern2, "^[0-9]{3}$");
-    printf("%s\n", input);
+    
+    printf("input: %s\n", input);
     status1 = regcomp(&regex, pattern1, REG_EXTENDED);
     status2 = regcomp(&regex2, pattern2, REG_EXTENDED);
-    printf("%d, %d\n", status1, status2);
+    printf("status1: %d, status2: %d\n", status1, status2);
+
     status1 = regexec(&regex, input, 0, NULL, 0);
     status2 = regexec(&regex2, input, 0, NULL, 0);
-    printf("%d, %d\n", status1, status2);
+    printf("status1: %d, status2: %d\n", status1, status2);
+
     /* random seed, used for adveture page */
     srand(time(NULL));
     
@@ -253,7 +298,7 @@ void update_page_state(Page *page, Pokedex *pokedex, char *input)
     }
 
     /* clear screen and display Page */
-    clear_screen();
+    clearScreen();
     switch (page->currentState) {
         case MENU:
             printMenuPage();
