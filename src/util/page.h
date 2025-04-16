@@ -58,7 +58,7 @@ typedef struct {
  * ----------------------
  * Clears the console screen based on the operating system.
  */
-void clearScreen();
+void clearScreen(void);
 
 /**
  * Function: printOptions
@@ -75,7 +75,7 @@ void printOptions(PageState state);
  * -----------------------
  * Displays the welcome menu screen.
  */
-void printMenuPage();
+void printMenuPage(void);
 
 /**
  * Function: printPokedexPage

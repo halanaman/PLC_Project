@@ -11,7 +11,7 @@
 
 const char *savefile = "data/pokedex.dat";
 
-void clearScreen() {
+void clearScreen(void) {
     #ifdef _WIN32
         #define CLEAR "cls"
     #else /* In any other OS */
@@ -61,7 +61,7 @@ void printOptions(PageState state) {
     }
 }
 
-void printMenuPage() {   
+void printMenuPage(void) {   
     printf("Menu:\n");
     printBorder("top", PAGE_WIDTH);
     printCenteredText("Welcome to the Pokedex Game!", PAGE_WIDTH);
