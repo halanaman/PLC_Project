@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "file_io.h"
-#include "../util/pokedex.h"
 
 void trimNewline(char *str) {
     size_t len = strlen(str);

@@ -1,7 +1,7 @@
 #ifndef FILE_IO_H
 #define FILE_IO_H
 
-#include "../util/pokedex.h"
+#include "utils/pokedex.h"
 
 #define MAX_LINE_LENGTH 256
 

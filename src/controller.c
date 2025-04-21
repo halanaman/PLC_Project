@@ -3,7 +3,7 @@
 #include <time.h>
 #include "controller.h"
 #include "view.h"
-#include "../utils/constants.h"
+#include "utils/constants.h"
 
 void controller_init(Controller* controller, FSM* fsm) {
     controller->fsm = fsm;

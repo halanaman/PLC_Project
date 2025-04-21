@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include "file_io.h"
-#include "../util/pokedex.h"
-#include "../util/db.h"
+#include "utils/pokedex.h"
+#include "utils/db.h"
 
 Pokedex pokedex;
 const char *filename = "../../data/pokemon.csv";

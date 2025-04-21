@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include "view.h"
-#include "../utils/constants.h"
-#include "../utils/printhelper.h"
+#include "utils/constants.h"
+#include "utils/printhelper.h"
 
 #ifdef _WIN32
 #include <windows.h>

@@ -1,5 +1,5 @@
 #include "page.h"
-#include "../utils/pokemon.h"
+#include "utils/pokemon.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
