@@ -5,7 +5,7 @@
 
 void printCenteredText(const char *text, int width) {
     int len, padding, extra;
-    char buffer[100];
+    char buffer[128];
     len = strlen(text);
     if (len > width-2) {len = width-2;}
     padding = (width - 2 - len) / 2;
@@ -25,7 +25,7 @@ void printLeftAlignedText(const char *text, int width) {
 
 void printWrappedText(const char *text, int width) {
     int start, end, len, line_width;
-    char line[100], buffer[100];
+    char line[128], buffer[128];
     start = 0;
     strcpy(line, text);
     len = strlen(line);
@@ -51,8 +51,8 @@ void printWrappedText(const char *text, int width) {
 
 void printPokemonAscii(const char *name, int width) {
     FILE *file;
-    char filename[100];
-    char line[100];
+    char filename[128];
+    char line[128];
     sprintf(filename, "data/ascii/%s.txt", name);
 
     file = fopen(filename, "r");
@@ -96,7 +96,7 @@ void printBorder(const char *text, int width) {
 
 void printCenteredTextToFile(FILE *out, const char *text, int width) {
     int len, padding, extra;
-    char buffer[100];
+    char buffer[128];
     len = strlen(text);
     if (len > width-2) {len = width-2;}
     padding = (width - 2 - len) / 2;
@@ -109,7 +109,7 @@ void printCenteredTextToFile(FILE *out, const char *text, int width) {
 
 void printWrappedTextToFile(FILE *out, const char *text, int width) {
     int start, end, len, line_width;
-    char line[100], buffer[100];
+    char line[128], buffer[128];
     start = 0;
     strcpy(line, text);
     len = strlen(line);
@@ -135,8 +135,8 @@ void printWrappedTextToFile(FILE *out, const char *text, int width) {
 
 void printPokemonAsciiToFile(FILE *out, const char *name, int width) {
     FILE *file;
-    char filename[100];
-    char line[100];
+    char filename[128];
+    char line[128];
     sprintf(filename, "data/ascii/%s.txt", name);
 
     file = fopen(filename, "r");
@@ -155,7 +155,7 @@ void printPokemonAsciiToFile(FILE *out, const char *name, int width) {
 }
 
 void printBorderToFile(FILE *out, const char *text, int width) {
-    char buffer[100];
+    char buffer[128];
     if (strcmp(text, "top")==0) {
         memset(buffer, '_', width);
         buffer[width] = 0;
