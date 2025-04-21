@@ -17,7 +17,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/$(SRC_DIR)/%.o,$(wildcard $(SRC_DIR)
        $(patsubst $(UTIL_DIR)/%.c,$(OBJ_DIR)/$(UTIL_DIR)/%.o,$(wildcard $(UTIL_DIR)/*.c))
 
 # Executable name
-TARGET = main
+TARGET = pokeventure
 
 # Default target
 all: $(TARGET)
