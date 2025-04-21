@@ -5,7 +5,7 @@ CFLAGS_ANSI = -ansi -pedantic $(CFLAGS)
 
 # Directories
 SRC_DIR = src
-UTIL_DIR = utils
+UTIL_DIR = src/utils
 OBJ_DIR = build
 
 # Source files

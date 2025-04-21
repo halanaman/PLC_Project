@@ -1,4 +1,5 @@
 #include "page.h"
+#include "fsm.h"
 #include "utils/pokemon.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,13 +28,19 @@ const char* getErrorMsg(int errorState) {
     }
 }
 
-Page* page_get(State state, int subState, int errorState, int screenWidth, int screenHeight) {
+Page* page_get(FSM* fsm, int pokemonId, int screenWidth, int screenHeight) {
+    State state;
+    int subState, errorState;
     Page* page = malloc(sizeof(Page));
     static const Action nullActions[] = {{NULL, NULL}};
     static const Action errorActions[] = {
         {"1", "Back"},
     };
-    printf("getting page\n");
+
+    state = fsm_getCurrentState(fsm);
+    subState = fsm_getCurrentSubState(fsm);
+    errorState = fsm_getErrorState(fsm);
+
     /* Set page default values */
     page->pageType = STANDARD_PAGE;
     page->contentAlignment = ALIGN_CENTER;
@@ -54,7 +61,6 @@ Page* page_get(State state, int subState, int errorState, int screenWidth, int s
             {"2", "Start Adventure"},
             {"s", "Save & Exit"},
         };
-        printf("HOME_STATE\n");
         
         page->subtitle = malloc(3 * sizeof(char*));
         page->subtitle[0] = strdup("Welcome to PokeVenture!");
@@ -107,10 +113,8 @@ Page* page_get(State state, int subState, int errorState, int screenWidth, int s
                 break;
             case 1:
                 /* Encounter Pokemon */
-                
-                page->content = get_pokemon_ascii();
-                /* page->subtitle = get_pokemon_pokemon_subtitle; */
-                
+                page->content = get_pokemon_ascii(pokemonId);
+                page->subtitle = get_pokemon_subtitle(pokemonId);
                 page->actions = encPkmActions;
                 page->actionsCount = 3;
                 break;
@@ -164,7 +168,6 @@ Page* page_get(State state, int subState, int errorState, int screenWidth, int s
 void page_free(Page* page) {
     if (page->content) {
         int i;
-        printf("FREEING\n");
         for (i = 0; page->content[i] != NULL; i++) {
             free(page->content[i]);
         }

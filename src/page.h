@@ -38,7 +38,7 @@ typedef struct {
 const char* getTitle(State state);
 const char* getErrorMsg(int errorState);
 
-Page* page_get(State state, int subState, int errorState, int screenWidth, int screenHeight);
+Page* page_get(FSM* fsm, int pokemonId, int screenWidth, int screenHeight);
 void page_free(Page* page);
 
 #endif

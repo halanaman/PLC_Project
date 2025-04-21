@@ -5,19 +5,15 @@
 #include "view.h"
 #include "utils/constants.h"
 
+int no_of_pokemon = 50;
+
 void controller_init(Controller* controller, FSM* fsm) {
     controller->fsm = fsm;
     controller->isRunning = 1;
 }
 
 Page* controller_getPage(Controller* controller) {
-    State currentState;
-    int currentSubState, errorState;
-    currentState = fsm_getCurrentState(controller->fsm);
-    currentSubState = fsm_getCurrentSubState(controller->fsm);
-    errorState = fsm_getErrorState(controller->fsm);
-
-    return page_get(currentState, currentSubState, errorState, SCREEN_WIDTH, SCREEN_HEIGHT);
+    return page_get(controller->fsm, controller->pokemonId, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void controller_handleInput(Controller* controller, const char* input) {
@@ -46,9 +42,11 @@ void controller_handleInput(Controller* controller, const char* input) {
 
                         if (random_num < 70) {
                             /* 70% chance of encountering Pokemon (subState == 1) */
+                            controller->pokemonId = (rand() % no_of_pokemon) + 1;
                             fsm_updateState(controller->fsm, STATE_ADVENTURE, 1, 0);
                         } else {
                             /* 30% chance of encountering nothing (subState == 2) */
+                            controller->pokemonId = 0;
                             fsm_updateState(controller->fsm, STATE_ADVENTURE, 2, 0);
                         }
                     }

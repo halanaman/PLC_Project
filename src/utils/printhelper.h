@@ -1,7 +1,7 @@
 #ifndef PRINTHELPER_H
 #define PRINTHELPER_H
 
-#include "../src/page.h"
+#include "../page.h"
 
 void print_side_border(void);
 void print_bottom_border(int length);

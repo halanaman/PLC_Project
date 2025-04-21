@@ -20,4 +20,7 @@ typedef struct {
     char desc[MAX_POKEMON_DESC_LENGTH];
 } Pokemon;
 
+char** get_pokemon_ascii(int pokemonId);
+char** get_pokemon_subtitle(int pokemonId);
+
 #endif

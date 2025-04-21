@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "fsm.h"
+#include "utils/db.h"
 
 State fsm_getCurrentState(FSM* fsm)     { return fsm->currentState; }
 int fsm_getCurrentSubState(FSM* fsm)    { return fsm->currentSubState; }

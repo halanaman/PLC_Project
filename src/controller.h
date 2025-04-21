@@ -6,6 +6,7 @@
 typedef struct {
     FSM* fsm;
     int isRunning;
+    int pokemonId;
 } Controller;
 
 void controller_init(Controller* controller, FSM* fsm);
