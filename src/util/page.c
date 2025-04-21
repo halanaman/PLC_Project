@@ -64,7 +64,7 @@ void printOptions(PageState state) {
 void printMenuPage(void) {   
     printf("Menu:\n");
     printBorder("top", PAGE_WIDTH);
-    printCenteredText("Welcome to the Pokedex Game!", PAGE_WIDTH);
+    printCenteredText("Welcome to PokeVenture!", PAGE_WIDTH);
     printBorder("middle", PAGE_WIDTH);
     printWrappedText("Gotta catch 'em all! Start your journey to discover and learn about different Pokemon!", PAGE_WIDTH);
     printBorder("bottom", PAGE_WIDTH);
