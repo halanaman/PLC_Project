@@ -28,7 +28,6 @@ int main(int argc, char ** argv)
     /* Load the Initial Page */
     clearScreen();
     printMenuPage();
-    pokedex.pokedexList->seen=1;
 
     /* Game starts, prints options available, wait for user input, handle page accordingly */
     while(1)
