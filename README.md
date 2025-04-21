@@ -22,9 +22,9 @@ To compile the program, run:
 ```sh
 make
 ```
-This will compile the `main.c` file located in the `src/` directory and generate an executable named `pokeventure`
+This will compile the `main.c` file located in the `src/` directory and generate an executable named `pokedex.exe`
 
-Launch the program `./pokeventure`
+Launch the program `./pokedex.exe`
 
 ### Compilation Without ANSI
 To compile the progam without ansi, edit `Makefile` in the project root folder
@@ -41,7 +41,7 @@ To remove the compiled executable, run:
 ```sh
 make clean
 ```
-This will delete the `pokeventure` executable file
+This will delete the `pokedex.exe` executable file
 
 ## File Structure
 ```css
