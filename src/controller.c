@@ -17,6 +17,7 @@ Page* controller_getPage(Controller* controller) {
 }
 
 void controller_handleInput(Controller* controller, const char* input) {
+    /* Transition between states depending on input */
     State currentState;
     int currentSubState;
     currentState = fsm_getCurrentState(controller->fsm);
@@ -76,7 +77,15 @@ void controller_handleInput(Controller* controller, const char* input) {
             else if (strcmp(input, "d") == 0)   { fsm_updateState(controller->fsm, STATE_POKEDEX, 0, 0); }
             else if (strcmp(input, "1") == 0)   { fsm_updateState(controller->fsm, STATE_POKEDEX, 0, 0); }
             else if (strcmp(input, "b") == 0)   { fsm_updateState(controller->fsm, STATE_HOME, 0, 0); }
-            else { fsm_updateState(controller->fsm, STATE_POKEDEX, currentSubState, 1); }
+            else if (strlen(input) == 3) {
+                int pokemonId = atoi(input);
+                if (pokemonId >= 1 && pokemonId <= no_of_pokemon) {
+                    controller->pokemonId = pokemonId;
+                    fsm_updateState(controller->fsm, STATE_POKEMON, pokemonId, 0);
+                } else {
+                    fsm_updateState(controller->fsm, STATE_POKEDEX, 0, 2);
+                }
+            } else { fsm_updateState(controller->fsm, STATE_POKEDEX, currentSubState, 1); }
             break;
         case STATE_POKEMON:
             if (strcmp(input, "1") == 0)        { fsm_updateState(controller->fsm, STATE_POKEMON, 0, 0); }

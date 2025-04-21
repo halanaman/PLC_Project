@@ -31,7 +31,7 @@ const char* getErrorMsg(int errorState) {
 Page* page_get(FSM* fsm, int pokemonId, int screenWidth, int screenHeight) {
     State state;
     int subState, errorState;
-    
+
     Page* page = malloc(sizeof(Page));
     static const Action nullActions[] = {{NULL, NULL}};
     static const Action errorActions[] = {
@@ -140,7 +140,18 @@ Page* page_get(FSM* fsm, int pokemonId, int screenWidth, int screenHeight) {
                 page->actionsCount = 1;
         }
     } else if (state == STATE_POKEDEX) {
-        /* code */
+        static const Action pokedexActions[] = {
+            {"XXX", "View Pokemon #XXX"},
+            {"a", "Previous page"},
+            {"d", "Next page"},
+            {"1", "Add custom Pokemon"},
+            {"b", "Back to home page"},
+        };
+        
+        page->content = get_pokedex_content(screenWidth, screenHeight);
+        page->actions = pokedexActions;
+        page->actionsCount = 5;
+        page->errorMsg = getErrorMsg(errorState);
     } else if (state == STATE_SAVE) {
         static const char* typedText1[] = {
             "Saving game...",
