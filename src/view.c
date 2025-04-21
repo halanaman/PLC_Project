@@ -8,6 +8,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#define strdup _strdup
 #define SLEEP(ms) Sleep(ms)
 #else
 #include <unistd.h>
