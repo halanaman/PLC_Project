@@ -1,6 +1,17 @@
 # Ignore the entire build directory
 build/
+*.o
+*.a
+*.so
+*.out
+*.exe
+*.dat
 
 # Ignore OS-specific files
 *.DS_Store
 Thumbs.db
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
