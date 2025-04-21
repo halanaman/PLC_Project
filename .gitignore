@@ -1,0 +1,6 @@
+# Ignore the entire build directory
+build/
+
+# Ignore OS-specific files
+*.DS_Store
+Thumbs.db
