@@ -19,7 +19,6 @@ Page* controller_getPage(Controller* controller) {
 void controller_handleInput(Controller* controller, const char* input) {
     State currentState;
     int currentSubState;
-    Page* page;
     currentState = fsm_getCurrentState(controller->fsm);
     currentSubState = fsm_getCurrentSubState(controller->fsm);
 
@@ -27,7 +26,10 @@ void controller_handleInput(Controller* controller, const char* input) {
         case STATE_HOME:
             if (strcmp(input, "1") == 0)        { fsm_updateState(controller->fsm, STATE_POKEDEX, 0, 0); }
             else if (strcmp(input, "2") == 0)   { fsm_updateState(controller->fsm, STATE_ADVENTURE, 0, 0); }
-            else if (strcmp(input, "s") == 0)   { fsm_updateState(controller->fsm, STATE_SAVE, 0, 0); }
+            else if (strcmp(input, "s") == 0) {
+                fsm_updateState(controller->fsm, STATE_SAVE, 0, 0);
+                controller->isRunning = 0;
+            }
             else { fsm_updateState(controller->fsm, STATE_HOME, currentSubState, 1); }
             break;
         case STATE_ADVENTURE:
@@ -85,8 +87,6 @@ void controller_handleInput(Controller* controller, const char* input) {
             fsm_updateState(controller->fsm, STATE_HOME, 0, 4);
     }
 
-    page = controller_getPage(controller);
-    view_displayPage(page);
-    page_free(page);
+    view_displayPage(controller_getPage(controller));
 }
 

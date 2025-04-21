@@ -46,8 +46,8 @@ char* clean_input(char* input) {
 void display_typing_page(Page* page, int screen_length, int screen_height, int typing_delay_ms, int typing_screen_delay_ms) {
     int sceneIdx;
     int contentHeight;
-    
-    /* Display every scene */
+
+    /* For each scene */
     for (sceneIdx = 0; sceneIdx < page->typedSceneCount; sceneIdx++) {
         int currentLine, lineCount, currentChar, totalChars;
         const char** scene = page->typedScenes[sceneIdx];
@@ -76,12 +76,11 @@ void display_typing_page(Page* page, int screen_length, int screen_height, int t
                     typedChars[j] = NULL;
                 }
 
-                /* Copy lines typed so far to array */
+                /* Copy lines typed so far into array */
                 for (j = 0; j < currentLine; j++) {
                     typedChars[j] = strdup(scene[j]);
                 }
-
-                /* Copy characters typed so far on the current line into the array */
+                /* Copy characters typed so far into the array */
                 if (line[i] != '\0') {
                     typedChars[currentLine] = malloc(i + 2);
                     strncpy(typedChars[currentLine], line, i + 1);
@@ -89,8 +88,8 @@ void display_typing_page(Page* page, int screen_length, int screen_height, int t
                 } else {
                     typedChars[currentLine] = strdup(line);
                 }
-                
-                contentHeight = screen_height - 4;
+
+                contentHeight = screen_height - 3;
                 /* Print the page */
                 clear_screen();
                 print_title(page->title, screen_length);
@@ -105,7 +104,7 @@ void display_typing_page(Page* page, int screen_length, int screen_height, int t
                     }
                 }
                 free(typedChars);
-
+                
                 /* Delay before typing next character */
                 SLEEP(typing_delay_ms);
             }
@@ -114,17 +113,12 @@ void display_typing_page(Page* page, int screen_length, int screen_height, int t
         SLEEP(typing_screen_delay_ms);
     }
 
-    /* Display final standard page */
-    clear_screen();
-    print_title(page->title, screen_length);
-    print_content_subtitle(page->contentAlignment, page->content, NULL, screen_length, contentHeight);
-    print_actions(page->actions, page->actionsCount, screen_length);
-    print_bottom_border(screen_length);
-    print_error_msg(page->errorMsg);
+    /* Display final page */
+    display_standard_page(page, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void display_standard_page(Page* page, int screen_length, int screen_height) {
-    int contentHeight = (page->actionsCount > 0) ? (screen_height - page->actionsCount - 4) : (screen_height - 2);
+    int contentHeight = (page->actionsCount > 0) ? (screen_height - page->actionsCount - 5) : (screen_height - 3);
 
     clear_screen();
     print_title(page->title, screen_length);
@@ -137,13 +131,13 @@ void display_standard_page(Page* page, int screen_length, int screen_height) {
 void view_displayPage(Page* page) {
     if (page->pageType == STANDARD_PAGE) {
         display_standard_page(page, SCREEN_WIDTH, SCREEN_HEIGHT);
-    } else if (page->pageType == TYPING_PAGE && page->errorMsg) {
+    } else if ((page->pageType == TYPING_PAGE) && page->errorMsg) {
         /* Skip typing if there's an error message */
         display_standard_page(page, SCREEN_WIDTH, SCREEN_HEIGHT);
     } else {
         display_typing_page(page, SCREEN_WIDTH, SCREEN_HEIGHT, TYPING_DELAY, TYPING_SCREEN_DELAY);
-        display_standard_page(page, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
+    if (page) { page_free(page); }
 }
 
 char* view_getInput(void) {
@@ -173,11 +167,10 @@ char* view_getInput(void) {
 
 void view_init(View* view, Controller* controller) {
     view->controller = controller;
+    view_displayPage(controller_getPage(view->controller));
 
     while (view->controller->isRunning) {
         char* input;
-
-        view_displayPage(controller_getPage(view->controller));
         input = view_getInput();
         controller_handleInput(view->controller, input);
     }

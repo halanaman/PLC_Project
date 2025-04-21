@@ -40,12 +40,12 @@ void print_title(const char* title, int screen_length) {
     right_padding = total_padding - left_padding;
 
     /* ┌───── Print The Title Like This ─────┐ */
+    /* │                                     │ */
     printf("┌");
     for (i = 0; i < left_padding; i++)  { printf("─"); }
     printf(" %s ", title);
     for (i = 0; i < right_padding; i++) { printf("─"); }
     printf("┐\n");
-
     print_empty_line(screen_length);
 }
 
@@ -103,7 +103,7 @@ void print_content_subtitle(ContentAlignment contentAlignment, char** content, c
     /* Add one line in between content and subtitle */
     total_line_count = content_line_count + subtitle_line_count + 1;
     top_padding = ((height - total_line_count) < 0) ? 0 : (height - total_line_count) / 2;
-    bottom_padding = (height - total_line_count - top_padding) < 0? 0 : (height - total_line_count - top_padding);
+    bottom_padding = (height - total_line_count - top_padding) < 0 ? 0 : (height - total_line_count - top_padding);
 
     /* Print top padding */
     for (i = 0; i < top_padding; i++) { print_empty_line(screen_length); }
@@ -119,11 +119,10 @@ void print_content_subtitle(ContentAlignment contentAlignment, char** content, c
                 break;
         }
     }
-    
+    /* One empty line between content and subtitle */
+    print_empty_line(screen_length);
     /* Print subtitle */
     if (subtitle) {
-        /* One empty line between content and subtitle */
-        print_empty_line(screen_length);
         for (i = 0; i < subtitle_line_count; i++) {
             print_centered_text(subtitle[i], screen_length);
         }

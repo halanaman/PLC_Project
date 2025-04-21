@@ -31,6 +31,7 @@ const char* getErrorMsg(int errorState) {
 Page* page_get(FSM* fsm, int pokemonId, int screenWidth, int screenHeight) {
     State state;
     int subState, errorState;
+    
     Page* page = malloc(sizeof(Page));
     static const Action nullActions[] = {{NULL, NULL}};
     static const Action errorActions[] = {
