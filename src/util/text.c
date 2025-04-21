@@ -71,11 +71,13 @@ void printPokemonAscii(const char *name, int width) {
 }
 
 void printBorder(const char *text, int width) {
-    char buffer[100];
+    char buffer[100] = {0};
     if (strcmp(text, "top")==0) {
         memset(buffer, '_', width);
         buffer[width] = 0;
+        printf("Debug100\n");
         printf("%s\n", buffer);
+        printf("Debug200\n");
     }
     else if (strcmp(text, "middle")==0) {
         memset(buffer, '-', width-2);

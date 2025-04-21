@@ -107,18 +107,19 @@ void printPokedexPage(Pokedex *pokedex, int page) {
 
 void printCardViewPage(Pokemon *pokemon, PokedexListItem *pokemonSeen) {
     char buffer[100];
-    
+    printf("Debug0\n");
     printf("CardView:\n");
     printBorder("top", CARD_WIDTH);
-
+    printf("Debug1\n");
     /* Prints Name, Type, and HP status */
     pokemonSeen->seen? sprintf(buffer, "%03d %s", pokemon->id, pokemon->name) : 
                         sprintf(buffer, "%03d Pokemon Name", pokemon->id);
+                        printf("Debug2\n");
     printCenteredText(buffer, CARD_WIDTH);
     pokemonSeen->seen? sprintf(buffer, "%s | HP: %d", pokemon->type, pokemon->hp) : 
                         sprintf(buffer, "Type | HP: --");
     printCenteredText(buffer, CARD_WIDTH);
-
+    printf("Debug2\n");
     printBorder("middle", CARD_WIDTH);
 
     /* Prints Ascii art of the Pokemon if seen */
